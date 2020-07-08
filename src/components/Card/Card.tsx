@@ -7,7 +7,7 @@ interface ICardProps {
   user: string;
   cardKey: number;
   card: ICard;
-  openContextMenu: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  openContextMenu?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 interface ICardStatePros {
@@ -34,7 +34,6 @@ const Card: React.FC<ICardProps & ICardStatePros> = ({
       onClick={openContextMenu}
       disabled={inTurn.phase === "taking card" || currentUser !== user}
     >
-      {cardKey}
       <img
         height="100"
         src={`./cards/${card.cardCode}.jpg`}

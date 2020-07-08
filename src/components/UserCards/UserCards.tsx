@@ -1,6 +1,6 @@
 import React from "react";
 import { ICard } from "../../services/game";
-import DragNDrop from "../DragNDrop/DragNDrop";
+import UserDraggableCards from "./UserDraggableCards";
 
 interface IUserCards {
   user: string;
@@ -29,7 +29,11 @@ const UserCards: React.FC<IUserCards> = ({
         {user === "user1" ? "Jogador 1" : "Jogador 2"} - Cartas
       </h2>
     </div>
-    <DragNDrop data={inHand} user={user} openContextMenu={openContextMenu} />
+    <UserDraggableCards
+      data={inHand}
+      user={user}
+      openContextMenu={openContextMenu}
+    />
     {phase === "pass turn" && currentUser === user && (
       <ul>
         <li>

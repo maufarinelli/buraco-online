@@ -7,6 +7,7 @@ import {
   addToDiscarded,
   changeUser,
   getFromDiscarded,
+  putOnTheTable,
 } from "../../store/actions";
 import { connect } from "react-redux";
 import { store } from "../../store/store";
@@ -15,7 +16,9 @@ import Deck from "../Deck/Deck";
 import Table from "../Table/Table";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import UserCards from "../UserCards/UserCards";
-import { TableWrapper } from "../styles";
+import { TableWrapper, UserTableWrapper } from "../styles";
+import { BoardWrapper, GameWrapper } from "./styles";
+import UserTable from "../UserTable/UserTable";
 
 const Board: React.FC<any> = ({
   user1,
@@ -78,7 +81,16 @@ const Board: React.FC<any> = ({
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     const user = event.currentTarget.dataset.user;
-    dispatchPutOnTable();
+    const cardKey = parseInt(event.currentTarget.dataset.cardKey as string, 10);
+
+    if ((user === "user1" || user === "user2") && cardKey) {
+      const state = store.getState();
+      const userHand = state[user].inHand;
+      const card = userHand.get(cardKey);
+
+      dispatchPutOnTable(user, { key: cardKey, value: card });
+      dispatchChangeUser();
+    }
   };
 
   const handlePassTurnClick = () => {
@@ -116,20 +128,10 @@ const Board: React.FC<any> = ({
   };
 
   return (
-    <div
-      style={{ height: "100vh", margin: "0 20px", overflowY: "hidden" }}
-      onClick={closeContextMenu}
-    >
+    <GameWrapper onClick={closeContextMenu}>
       <Header user={inTurn.user} phase={inTurn.phase} />
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          height: "calc(100% - 160px)",
-        }}
-      >
+      <BoardWrapper>
         <UserCards
           user="user1"
           phase={inTurn.phase}
@@ -140,6 +142,10 @@ const Board: React.FC<any> = ({
           handlePutOnTableClick={handlePutOnTableClick}
           handlePassTurnClick={handlePassTurnClick}
         />
+        <UserTableWrapper>
+          <p>Jogos do jogador 1</p>
+          <UserTable />
+        </UserTableWrapper>
 
         <TableWrapper>
           <Deck
@@ -155,6 +161,11 @@ const Board: React.FC<any> = ({
           />
         </TableWrapper>
 
+        <UserTableWrapper>
+          <p>Jogos do jogador 2</p>
+          <UserTable />
+        </UserTableWrapper>
+
         <UserCards
           user="user2"
           phase={inTurn.phase}
@@ -165,7 +176,7 @@ const Board: React.FC<any> = ({
           handlePutOnTableClick={handlePutOnTableClick}
           handlePassTurnClick={handlePassTurnClick}
         />
-      </div>
+      </BoardWrapper>
 
       {/* <Stage options={{ backgroundColor: 0x076324 }}>
         <Container />
@@ -183,7 +194,7 @@ const Board: React.FC<any> = ({
           handleGetFromDiscardedClick={handleGetFromDiscardedClick}
         />
       )}
-    </div>
+    </GameWrapper>
   );
 };
 
@@ -214,7 +225,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch(discard(user, card));
     dispatch(addToDiscarded(card));
   },
-  dispatchPutOnTable: () => dispatch(),
+  dispatchPutOnTable: (user: string, card: { key: number; value: string }) =>
+    dispatch(putOnTheTable(user, card)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);

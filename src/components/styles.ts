@@ -14,3 +14,9 @@ export const TableWrapper = styled.div`
 export const CardWrapper = styled.button`
   margin-left: -40px;
 `;
+
+export const UserTableWrapper = styled.div`
+  border: 1px solid #fff;
+  margin: 10px 0;
+  padding: 20px;
+`;

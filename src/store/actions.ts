@@ -69,10 +69,14 @@ export const addToHand = (user: string, { key, value }: IMapItem) => {
   };
 };
 
-export const putOnTheTable = ({ key, value }: IMapItem) => ({
-  type: "PUT_ON_THE_TABLE",
-  payload: {
-    key,
-    value,
-  },
-});
+export const putOnTheTable = (user: string, { key, value }: IMapItem) => {
+  const type = user === "user1" ? "PUT_ON_THE_TABLE_1" : "PUT_ON_THE_TABLE_2";
+
+  return {
+    type,
+    payload: {
+      key,
+      value,
+    },
+  };
+};

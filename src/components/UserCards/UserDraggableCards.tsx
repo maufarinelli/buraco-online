@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, ReactNode } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ICard } from "../../services/game";
 import Card from "../Card/Card";
 
@@ -8,13 +8,7 @@ interface IDragNDropPros {
   openContextMenu: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-// @ts-ignore
-Array.prototype.swapItems = function (a: any, b: any) {
-  this[a] = this.splice(b, 1, this[a])[0];
-  return this;
-};
-
-const DragNDrop: React.FC<IDragNDropPros> = ({
+const UserDraggableCards: React.FC<IDragNDropPros> = ({
   data,
   user,
   openContextMenu,
@@ -105,4 +99,4 @@ const DragNDrop: React.FC<IDragNDropPros> = ({
   }
 };
 
-export default DragNDrop;
+export default UserDraggableCards;

@@ -42,7 +42,7 @@ export const user1 = (
         inHand,
       };
 
-    case "PUT_ON_THE_TABLE":
+    case "PUT_ON_THE_TABLE_1":
       const onTheTable = new Map(state.onTheTable);
 
       inHand.delete(key);
@@ -90,7 +90,7 @@ export const user2 = (
         inHand,
       };
 
-    case "PUT_ON_THE_TABLE":
+    case "PUT_ON_THE_TABLE_2":
       const onTheTable = new Map(state.onTheTable);
 
       inHand.delete(key);
