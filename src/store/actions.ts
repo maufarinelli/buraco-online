@@ -1,3 +1,5 @@
+import { ICard } from "../services/game";
+
 interface IMapItem {
   key: number;
   value: string;
@@ -66,6 +68,21 @@ export const addToHand = (user: string, { key, value }: IMapItem) => {
       key,
       value,
     },
+  };
+};
+
+export const changeCardsPositionInHand = (
+  user: string,
+  cards: Map<number, ICard>
+) => {
+  const type =
+    user === "user1"
+      ? "CHANGE_CARDS_POSITION_IN_HAND_1"
+      : "CHANGE_CARDS_POSITION_IN_HAND_2";
+
+  return {
+    type,
+    payload: cards,
   };
 };
 

@@ -26,6 +26,12 @@ export const user1 = (
         inHand,
       };
 
+    case "CHANGE_CARDS_POSITION_IN_HAND_1":
+      return {
+        ...state,
+        inHand: action.payload,
+      };
+
     case "DISCARD_1":
       inHand.delete(key); // number of key in the deck
 
@@ -72,6 +78,12 @@ export const user2 = (
       return {
         ...state,
         inHand,
+      };
+
+    case "CHANGE_CARDS_POSITION_IN_HAND_2":
+      return {
+        ...state,
+        inHand: action.payload,
       };
 
     case "DISCARD_2":
