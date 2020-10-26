@@ -1,7 +1,7 @@
 import React from "react";
 import { connect, MapDispatchToPropsFunction } from "react-redux";
 import { Action, Dispatch } from "redux";
-import { ICard, validateGame } from "../../services/game";
+import { getSortedCardsMap, ICard, validateGame } from "../../services/game";
 import { addNewGame, changeUser } from "../../store/actions";
 import SelectableCard from "../Card/SelectableCard";
 import { UserTableActive, UserTableActiveClickable } from "../styles";
@@ -31,13 +31,11 @@ const UserSelectableCards: React.FC<
         selectedList.delete(cardKey);
       }
     }
-
-    console.log("selectedList : ", selectedList);
   };
 
   const handleAddNewGame = () => {
     if (validateGame(selectedList)) {
-      dispatchAddNewGame(user, selectedList);
+      dispatchAddNewGame(user, getSortedCardsMap(selectedList));
     } else {
       console.log("Game not Valid");
     }

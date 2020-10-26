@@ -471,23 +471,21 @@ export const validateGame = (game: Map<number, ICard>) => {
       jokers.length === 2 &&
       cardsSuit.has(joker.cardCode.substr(joker.cardCode.length - 1))
     ) {
-      sortedCards = sortedCards.splice(1, 0, joker);
+      sortedCards.splice(1, 0, joker);
       joker = jokers[1];
     }
 
     // Get the index to place the joker
     let jokerIndex = 0;
     for (let i = 0; i < sortedCards.length - 1; i++) {
-      if (
-        sortedCards[i].relations.after !== sortedCards[i + 1].relations.before
-      ) {
+      if (sortedCards[i].relations.after !== sortedCards[i + 1].cardCode) {
         jokerIndex = i + 1;
         break;
       }
     }
 
     // place the joker
-    sortedCards = sortedCards.splice(jokerIndex, 0, joker);
+    sortedCards.splice(jokerIndex, 0, joker);
   }
 
   let isValid = sortedCards.every((card, index) => {
@@ -499,7 +497,10 @@ export const validateGame = (game: Map<number, ICard>) => {
       return true;
     }
 
-    if (sortedCards[index + 1].relations.before === "all") {
+    if (
+      sortedCards[index + 1].relations.before === "all" ||
+      card.relations.before === "all"
+    ) {
       return true;
     }
 
@@ -507,4 +508,58 @@ export const validateGame = (game: Map<number, ICard>) => {
   });
 
   return isValid;
+};
+
+export const getSortedCardsMap = (game: Map<number, ICard>) => {
+  const gameCards = [...game.values()];
+  const jokers = gameCards.filter((card) => card.cardSortNumber === 2);
+  const otherCards = gameCards.filter((card) => card.cardSortNumber !== 2);
+  const cardsSuit = otherCards.reduce((acc, card) => {
+    acc.add(card.cardCode.substr(card.cardCode.length - 1));
+    return acc;
+  }, new Set<string>());
+
+  let sortedCards = otherCards.sort(
+    (a, b) => a.cardSortNumber - b.cardSortNumber
+  );
+
+  if (jokers.length) {
+    // placing the joker, if there is one
+    let joker = jokers[0];
+
+    // Edge case, if 2 Cards (2), but one of them is the same suit
+    if (
+      jokers.length === 2 &&
+      cardsSuit.has(joker.cardCode.substr(joker.cardCode.length - 1))
+    ) {
+      sortedCards.splice(1, 0, joker);
+      joker = jokers[1];
+    }
+
+    // Get the index to place the joker
+    let jokerIndex = 0;
+    for (let i = 0; i < sortedCards.length - 1; i++) {
+      if (sortedCards[i].relations.after !== sortedCards[i + 1].cardCode) {
+        jokerIndex = i + 1;
+        break;
+      }
+    }
+
+    // place the joker
+    sortedCards.splice(jokerIndex, 0, joker);
+  }
+
+  const sortedCardsMap = new Map<number, ICard>();
+  sortedCards.forEach((sortedCard) => {
+    let sortedKey;
+    for (var [key, card] of game.entries()) {
+      if (sortedCard.cardCode === card.cardCode) {
+        sortedKey = key;
+        break;
+      }
+    }
+    if (sortedKey) sortedCardsMap.set(sortedKey, sortedCard);
+  });
+
+  return sortedCardsMap;
 };

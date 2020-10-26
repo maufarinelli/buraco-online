@@ -10,13 +10,13 @@ export interface IUserState {
 
 const initialUser1: IUserState = {
   inHand: initializedGame.user1Cards,
-  onTheTable: { games: [new Map()] },
+  onTheTable: { games: [] },
   tableActive: false,
 };
 
 const initialUser2: IUserState = {
   inHand: initializedGame.user2Cards,
-  onTheTable: { games: [new Map()] },
+  onTheTable: { games: [] },
   tableActive: false,
 };
 
@@ -82,6 +82,7 @@ export const user1 = (
         onTheTable: {
           games: [...state.onTheTable.games, action.payload],
         },
+        tableActive: false,
       };
 
     default:
@@ -151,6 +152,7 @@ export const user2 = (
         onTheTable: {
           games: [...state.onTheTable.games, action.payload],
         },
+        tableActive: false,
       };
 
     default:

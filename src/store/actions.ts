@@ -98,5 +98,5 @@ export const activatePutOnTable = (user: string) => {
 export const addNewGame = (user: string, cards: Map<number, ICard>) => {
   const type = user === "user1" ? "ADD_NEW_GAME_1" : "ADD_NEW_GAME_2";
 
-  return { type, payload: { cards } };
+  return { type, payload: cards };
 };

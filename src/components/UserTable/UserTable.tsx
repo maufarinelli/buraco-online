@@ -12,7 +12,7 @@ const GamesListItem = styled.li`
   min-width: 250px;
   display: inline-block;
   height: 109px;
-  border: 1px dotted #fff;
+  margin-right: 15px;
 `;
 interface IUserTable {
   user: string;
@@ -26,10 +26,10 @@ const UserTable: React.FC<IUserTable> = ({ user, onTheTable }) => {
   return (
     <div>
       <GamesList>
-        {games.map((game: Map<number, ICard>) => (
-          <GamesListItem>
+        {games.map((game: Map<number, ICard>, index: number) => (
+          <GamesListItem key={index}>
             {[...game.entries()].map(([cardKey, card]) => (
-              <Card user={user} cardKey={cardKey} card={card} />
+              <Card key={cardKey} user={user} cardKey={cardKey} card={card} />
             ))}
           </GamesListItem>
         ))}
