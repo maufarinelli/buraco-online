@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { ICard } from "../../services/game";
+import Card from "../Card/Card";
 
 const GamesList = styled.ul`
   list-style: none;
@@ -9,21 +11,26 @@ const GamesList = styled.ul`
 const GamesListItem = styled.li`
   min-width: 250px;
   display: inline-block;
-`;
-
-const GameSpace = styled.div`
-  height: 100px;
+  height: 109px;
   border: 1px dotted #fff;
 `;
+interface IUserTable {
+  user: string;
+  onTheTable: { games: Map<number, ICard>[] };
+  tableActive: boolean;
+}
 
-const UserTable = () => {
-  const games = [1];
+const UserTable: React.FC<IUserTable> = ({ user, onTheTable }) => {
+  const { games } = onTheTable;
+
   return (
     <div>
       <GamesList>
-        {games.map((game) => (
+        {games.map((game: Map<number, ICard>) => (
           <GamesListItem>
-            <GameSpace />
+            {[...game.entries()].map(([cardKey, card]) => (
+              <Card user={user} cardKey={cardKey} card={card} />
+            ))}
           </GamesListItem>
         ))}
       </GamesList>

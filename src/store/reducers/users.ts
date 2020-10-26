@@ -1,13 +1,23 @@
 import { initializedGame, ICard } from "../../services/game";
 
-const initialUser1 = {
+export interface IUserState {
+  inHand: Map<number, ICard>;
+  onTheTable: {
+    games: Map<number, ICard>[];
+  };
+  tableActive: boolean;
+}
+
+const initialUser1: IUserState = {
   inHand: initializedGame.user1Cards,
-  onTheTable: new Map<number, ICard>(),
+  onTheTable: { games: [new Map()] },
+  tableActive: false,
 };
 
-const initialUser2 = {
+const initialUser2: IUserState = {
   inHand: initializedGame.user2Cards,
-  onTheTable: new Map<number, ICard>(),
+  onTheTable: { games: [new Map()] },
+  tableActive: false,
 };
 
 export const user1 = (
@@ -48,15 +58,30 @@ export const user1 = (
         inHand,
       };
 
-    case "PUT_ON_THE_TABLE_1":
-      const onTheTable = new Map(state.onTheTable);
+    case "ACTIVATE_PUT_ON_THE_TABLE_1":
+      return {
+        ...state,
+        tableActive: true,
+      };
 
-      inHand.delete(key);
-      onTheTable.set(key, value);
+    case "CHANGE_USER":
+      return {
+        ...state,
+        tableActive: false,
+      };
+
+    case "ADD_NEW_GAME_1":
+      let cardsInHand = inHand;
+      for (const [key, value] of action.payload.entries()) {
+        cardsInHand.delete(key);
+      }
 
       return {
-        inHand,
-        onTheTable,
+        ...state,
+        inHand: cardsInHand,
+        onTheTable: {
+          games: [...state.onTheTable.games, action.payload],
+        },
       };
 
     default:
@@ -102,15 +127,30 @@ export const user2 = (
         inHand,
       };
 
-    case "PUT_ON_THE_TABLE_2":
-      const onTheTable = new Map(state.onTheTable);
+    case "ACTIVATE_PUT_ON_THE_TABLE_2":
+      return {
+        ...state,
+        tableActive: true,
+      };
 
-      inHand.delete(key);
-      onTheTable.set(key, value);
+    case "CHANGE_USER":
+      return {
+        ...state,
+        tableActive: false,
+      };
+
+    case "ADD_NEW_GAME_2":
+      let cardsInHand = inHand;
+      for (const [key, value] of action.payload.entries()) {
+        cardsInHand.delete(key);
+      }
 
       return {
-        inHand,
-        onTheTable,
+        ...state,
+        inHand: cardsInHand,
+        onTheTable: {
+          games: [...state.onTheTable.games, action.payload],
+        },
       };
 
     default:

@@ -1,15 +1,19 @@
 import React from "react";
 import { ICard } from "../../services/game";
 import UserDraggableCards from "./UserDraggableCards";
+import UserSelectableCards from "../UserSelectableCards/UserSelectableCards";
 
 interface IUserCards {
   user: string;
   phase: string;
   inHand: Map<number, ICard>;
   currentUser: string;
+  tableActive: boolean;
   openContextMenu: (event: React.MouseEvent<HTMLButtonElement>) => void;
   currentCardKey: number;
-  handlePutOnTableClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handleActivatePutOnTableModeClick: (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => void;
   handlePassTurnClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -19,8 +23,9 @@ const UserCards: React.FC<IUserCards> = ({
   inHand,
   currentUser,
   currentCardKey,
+  tableActive,
   openContextMenu,
-  handlePutOnTableClick,
+  handleActivatePutOnTableModeClick,
   handlePassTurnClick,
 }) => (
   <div>
@@ -29,18 +34,24 @@ const UserCards: React.FC<IUserCards> = ({
         {user === "user1" ? "Jogador 1" : "Jogador 2"} - Cartas
       </h2>
     </div>
-    <UserDraggableCards
-      data={inHand}
-      user={user}
-      openContextMenu={openContextMenu}
-    />
+
+    {tableActive ? (
+      <UserSelectableCards inHand={inHand} user={user} />
+    ) : (
+      <UserDraggableCards
+        data={inHand}
+        user={user}
+        openContextMenu={openContextMenu}
+      />
+    )}
+
     {phase === "pass turn" && currentUser === user && (
       <ul>
         <li>
           <button
             data-user={currentUser}
             data-card-key={currentCardKey}
-            onClick={handlePutOnTableClick}
+            onClick={handleActivatePutOnTableModeClick}
           >
             Descer jogo
           </button>

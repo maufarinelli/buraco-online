@@ -2,7 +2,7 @@ import { ICard } from "../services/game";
 
 interface IMapItem {
   key: number;
-  value: string;
+  value: ICard;
 }
 
 export const initializeGame = () => ({
@@ -86,14 +86,17 @@ export const changeCardsPositionInHand = (
   };
 };
 
-export const putOnTheTable = (user: string, { key, value }: IMapItem) => {
-  const type = user === "user1" ? "PUT_ON_THE_TABLE_1" : "PUT_ON_THE_TABLE_2";
+export const activatePutOnTable = (user: string) => {
+  const type =
+    user === "user1"
+      ? "ACTIVATE_PUT_ON_THE_TABLE_1"
+      : "ACTIVATE_PUT_ON_THE_TABLE_2";
 
-  return {
-    type,
-    payload: {
-      key,
-      value,
-    },
-  };
+  return { type };
+};
+
+export const addNewGame = (user: string, cards: Map<number, ICard>) => {
+  const type = user === "user1" ? "ADD_NEW_GAME_1" : "ADD_NEW_GAME_2";
+
+  return { type, payload: { cards } };
 };

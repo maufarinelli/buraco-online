@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Stage, Container } from "@inlet/react-pixi";
 import {
   removeFromDeck,
   addToHand,
@@ -7,7 +6,7 @@ import {
   addToDiscarded,
   changeUser,
   getFromDiscarded,
-  putOnTheTable,
+  activatePutOnTable,
 } from "../../store/actions";
 import { connect } from "react-redux";
 import { store } from "../../store/store";
@@ -16,9 +15,16 @@ import Deck from "../Deck/Deck";
 import Table from "../Table/Table";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import UserCards from "../UserCards/UserCards";
-import { TableWrapper, UserTableWrapper } from "../styles";
+import {
+  TableWrapper,
+  UserTableWrapper,
+  UserTableActive,
+  UserTableActiveClickable,
+} from "../styles";
 import { BoardWrapper, GameWrapper } from "./styles";
 import UserTable from "../UserTable/UserTable";
+import { ICard } from "../../services/game";
+import { IUserState } from "../../store/reducers/users";
 
 const Board: React.FC<any> = ({
   user1,
@@ -30,7 +36,7 @@ const Board: React.FC<any> = ({
   dispatchAddToHand,
   dispatchGetFromDiscarded,
   dispatchDiscard,
-  dispatchPutOnTable,
+  dispatchActivatePutOnTableModeClick,
 }) => {
   const [isContextMenuOpen, toggleContextMenu] = useState(false);
   const [contextMenuTop, setContextMenuTop] = useState(0);
@@ -69,7 +75,7 @@ const Board: React.FC<any> = ({
 
     if ((user === "user1" || user === "user2") && cardKey) {
       const state = store.getState();
-      const userHand = state[user].inHand;
+      const userHand = (state[user] as IUserState).inHand;
       const card = userHand.get(cardKey);
 
       dispatchDiscard(user, { key: cardKey, value: card });
@@ -77,20 +83,12 @@ const Board: React.FC<any> = ({
     }
   };
 
-  const handlePutOnTableClick = (
+  const handleActivatePutOnTableModeClick = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     const user = event.currentTarget.dataset.user;
-    const cardKey = parseInt(event.currentTarget.dataset.cardKey as string, 10);
 
-    if ((user === "user1" || user === "user2") && cardKey) {
-      const state = store.getState();
-      const userHand = state[user].inHand;
-      const card = userHand.get(cardKey);
-
-      dispatchPutOnTable(user, { key: cardKey, value: card });
-      dispatchChangeUser();
-    }
+    dispatchActivatePutOnTableModeClick(user);
   };
 
   const handlePassTurnClick = () => {
@@ -138,13 +136,18 @@ const Board: React.FC<any> = ({
           inHand={user1.inHand}
           currentUser={currentUser}
           currentCardKey={currentCardKey}
+          tableActive={user1.tableActive}
           openContextMenu={openContextMenu}
-          handlePutOnTableClick={handlePutOnTableClick}
+          handleActivatePutOnTableModeClick={handleActivatePutOnTableModeClick}
           handlePassTurnClick={handlePassTurnClick}
         />
         <UserTableWrapper>
-          <p>Jogos do jogador 1</p>
-          <UserTable />
+          <p>Jogos do jogador 1.</p>
+          <UserTable
+            user="user1"
+            onTheTable={user1.onTheTable}
+            tableActive={user1.tableActive}
+          />
         </UserTableWrapper>
 
         <TableWrapper>
@@ -163,24 +166,25 @@ const Board: React.FC<any> = ({
 
         <UserTableWrapper>
           <p>Jogos do jogador 2</p>
-          <UserTable />
+          <UserTable
+            user="user2"
+            onTheTable={user2.onTheTable}
+            tableActive={user2.tableActive}
+          />
         </UserTableWrapper>
 
         <UserCards
           user="user2"
           phase={inTurn.phase}
           inHand={user2.inHand}
+          tableActive={user2.tableActive}
           currentUser={currentUser}
           currentCardKey={currentCardKey}
           openContextMenu={openContextMenu}
-          handlePutOnTableClick={handlePutOnTableClick}
+          handleActivatePutOnTableModeClick={handleActivatePutOnTableModeClick}
           handlePassTurnClick={handlePassTurnClick}
         />
       </BoardWrapper>
-
-      {/* <Stage options={{ backgroundColor: 0x076324 }}>
-        <Container />
-      </Stage> */}
 
       {isContextMenuOpen && (
         <ContextMenu
@@ -190,7 +194,7 @@ const Board: React.FC<any> = ({
           contextMenuLeft={contextMenuLeft}
           isTable={isTable}
           handleDiscardClick={handleDiscardClick}
-          handlePutOnTableClick={handlePutOnTableClick}
+          handleActivatePutOnTableModeClick={handleActivatePutOnTableModeClick}
           handleGetFromDiscardedClick={handleGetFromDiscardedClick}
         />
       )}
@@ -212,21 +216,22 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => ({
   dispatchRemoveFromDeck: (item: any) => dispatch(removeFromDeck(item)),
-  dispatchAddToHand: (user: string, card: { key: number; value: string }) =>
+  dispatchAddToHand: (user: string, card: { key: number; value: ICard }) =>
     dispatch(addToHand(user, card)),
   dispatchGetFromDiscarded: (
     user: string,
-    card: { key: number; value: string }
+    card: { key: number; value: ICard }
   ) => {
     dispatch(getFromDiscarded(user, card));
   },
   dispatchChangeUser: () => dispatch(changeUser()),
-  dispatchDiscard: (user: string, card: { key: number; value: string }) => {
+  dispatchDiscard: (user: string, card: { key: number; value: ICard }) => {
     dispatch(discard(user, card));
     dispatch(addToDiscarded(card));
   },
-  dispatchPutOnTable: (user: string, card: { key: number; value: string }) =>
-    dispatch(putOnTheTable(user, card)),
+  dispatchActivatePutOnTableModeClick: (user: string) => {
+    dispatch(activatePutOnTable(user));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);

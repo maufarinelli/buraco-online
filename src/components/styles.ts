@@ -20,3 +20,16 @@ export const UserTableWrapper = styled.div`
   margin: 10px 0;
   padding: 20px;
 `;
+
+export const UserTableActive = styled.span`
+  display: inline-block;
+  margin-left: 5px;
+  padding: 2px 5px 2px 0;
+  background-color: #fff;
+  color: #000;
+`;
+
+export const UserTableActiveClickable = styled.span`
+  color: blue;
+  cursor: pointer;
+`;
