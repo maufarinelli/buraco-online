@@ -9,7 +9,9 @@ interface IContextMenuProps {
   isTable: boolean;
 
   handleDiscardClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  handlePutOnTableClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handleActivatePutOnTableModeClick: (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => void;
   handleGetFromDiscardedClick: (
     event: React.MouseEvent<HTMLButtonElement>
   ) => void;
@@ -24,7 +26,7 @@ const ContextMenu: React.FC<IContextMenuProps> = ({
   isTable,
 
   handleDiscardClick,
-  handlePutOnTableClick,
+  handleActivatePutOnTableModeClick,
   handleGetFromDiscardedClick,
 }) => (
   <div
@@ -46,7 +48,7 @@ const ContextMenu: React.FC<IContextMenuProps> = ({
           <button
             data-user={currentUser}
             data-card-key={currentCardKey}
-            onClick={handlePutOnTableClick}
+            onClick={handleActivatePutOnTableModeClick}
           >
             Descer jogo
           </button>

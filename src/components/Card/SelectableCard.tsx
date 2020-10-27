@@ -7,39 +7,46 @@ interface ICardProps {
   user: string;
   cardKey: number;
   card: ICard;
-  openContextMenu?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handleSelectedCards: (cardKey: number, isChecked: boolean) => void;
 }
 
 interface ICardStatePros {
   inTurn: IInTurnState;
 }
 
-const Card: React.FC<ICardProps & ICardStatePros> = ({
+const SelectableCard: React.FC<ICardProps & ICardStatePros> = ({
   user,
   cardKey,
   card,
-  openContextMenu,
   inTurn,
+  handleSelectedCards,
 }) => {
   const [currentUser, setCurrentUser] = useState(inTurn.user);
+  const [isChecked, setChecked] = useState(false);
 
   useEffect(() => {
     setCurrentUser(inTurn.user);
   }, [inTurn.user]);
 
+  const handleInputChange = () => {
+    setChecked((currentState) => !currentState);
+    handleSelectedCards(cardKey, !isChecked);
+  };
+
   return (
-    <button
-      data-user={user}
-      data-card-key={cardKey}
-      onClick={openContextMenu}
-      disabled={inTurn.phase === "taking card" || currentUser !== user}
-    >
+    <label htmlFor={cardKey.toString()}>
       <img
         height="100"
         src={`./cards/${card.cardCode}.jpg`}
         alt={card.cardLabel}
       />
-    </button>
+      <input
+        type="checkbox"
+        id={cardKey.toString()}
+        checked={isChecked}
+        onChange={handleInputChange}
+      />
+    </label>
   );
 };
 
@@ -51,4 +58,4 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-export default connect(mapStateToProps)(Card);
+export default connect(mapStateToProps)(SelectableCard);

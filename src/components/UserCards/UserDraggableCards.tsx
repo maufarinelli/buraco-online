@@ -1,24 +1,25 @@
-import React, { useState, useRef, useEffect, ReactNode } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ICard } from "../../services/game";
 import Card from "../Card/Card";
+import { changeCardsPositionInHand } from "../../store/actions";
+import { connect } from "react-redux";
 
-interface IDragNDropPros {
+interface IUserDraggableCardsProps {
   data: Map<number, ICard>;
   user: string;
-  openContextMenu: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  openContextMenu?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-// @ts-ignore
-Array.prototype.swapItems = function (a: any, b: any) {
-  this[a] = this.splice(b, 1, this[a])[0];
-  return this;
-};
+interface IUserDraggableCardsState {
+  dispatchChangeCardsPositionInHand: (
+    user: string,
+    cards: Map<number, ICard>
+  ) => void;
+}
 
-const DragNDrop: React.FC<IDragNDropPros> = ({
-  data,
-  user,
-  openContextMenu,
-}) => {
+const UserDraggableCards: React.FC<
+  IUserDraggableCardsProps & IUserDraggableCardsState
+> = ({ data, user, openContextMenu, dispatchChangeCardsPositionInHand }) => {
   const [list, setList] = useState(data);
   const [dragging, setDragging] = useState(false);
   const [dragItemNodeIndex, setDragItemNodeIndex] = useState(-1);
@@ -27,7 +28,6 @@ const DragNDrop: React.FC<IDragNDropPros> = ({
     setList(data);
   }, [setList, data]);
 
-  //   const dragItem = useRef(null);
   const dragItemNode = useRef(null);
 
   const handleDragStart = (
@@ -46,7 +46,7 @@ const DragNDrop: React.FC<IDragNDropPros> = ({
   };
 
   const handleDragEnter = (
-    event: React.MouseEvent<HTMLDivElement>,
+    event: React.DragEvent<HTMLDivElement>,
     cardList: { dragEndCardIndex: number }
   ) => {
     const { dragEndCardIndex } = cardList;
@@ -64,7 +64,10 @@ const DragNDrop: React.FC<IDragNDropPros> = ({
           newList.set(item[0], item[1]);
         });
 
-        return new Map(newList);
+        const newListCardsMap = new Map(newList);
+
+        dispatchChangeCardsPositionInHand(user, newListCardsMap);
+        return newListCardsMap;
       });
     }
   };
@@ -105,4 +108,11 @@ const DragNDrop: React.FC<IDragNDropPros> = ({
   }
 };
 
-export default DragNDrop;
+const mapDispatchToProps = (dispatch: any) => ({
+  dispatchChangeCardsPositionInHand: (
+    user: string,
+    cards: Map<number, ICard>
+  ) => dispatch(changeCardsPositionInHand(user, cards)),
+});
+
+export default connect(null, mapDispatchToProps)(UserDraggableCards);
