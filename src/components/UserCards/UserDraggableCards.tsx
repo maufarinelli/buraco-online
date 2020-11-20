@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 
 interface IUserDraggableCardsProps {
   data: Map<number, ICard>;
-  user: string;
+  userType: string;
   openContextMenu?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -19,7 +19,12 @@ interface IUserDraggableCardsState {
 
 const UserDraggableCards: React.FC<
   IUserDraggableCardsProps & IUserDraggableCardsState
-> = ({ data, user, openContextMenu, dispatchChangeCardsPositionInHand }) => {
+> = ({
+  data,
+  userType,
+  openContextMenu,
+  dispatchChangeCardsPositionInHand,
+}) => {
   const [list, setList] = useState(data);
   const [dragging, setDragging] = useState(false);
   const [dragItemNodeIndex, setDragItemNodeIndex] = useState(-1);
@@ -66,7 +71,7 @@ const UserDraggableCards: React.FC<
 
         const newListCardsMap = new Map(newList);
 
-        dispatchChangeCardsPositionInHand(user, newListCardsMap);
+        dispatchChangeCardsPositionInHand(userType, newListCardsMap);
         return newListCardsMap;
       });
     }
@@ -94,7 +99,7 @@ const UserDraggableCards: React.FC<
             }
           >
             <Card
-              user={user}
+              user={userType}
               cardKey={cardKey}
               card={card}
               openContextMenu={openContextMenu}

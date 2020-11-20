@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import GameContext from "../../context/GameContext/GameContext";
 import { ICard } from "../../services/game";
-import { connect } from "react-redux";
 import { IInTurnState } from "../../store/reducers/inTurn";
 
 interface ICardProps {
@@ -10,29 +10,20 @@ interface ICardProps {
   openContextMenu?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-interface ICardStatePros {
-  inTurn: IInTurnState;
-}
-
-const Card: React.FC<ICardProps & ICardStatePros> = ({
+const Card: React.FC<ICardProps> = ({
   user,
   cardKey,
   card,
   openContextMenu,
-  inTurn,
 }) => {
-  const [currentUser, setCurrentUser] = useState(inTurn.user);
-
-  useEffect(() => {
-    setCurrentUser(inTurn.user);
-  }, [inTurn.user]);
+  const { inTurn } = useContext(GameContext);
 
   return (
     <button
       data-user={user}
       data-card-key={cardKey}
       onClick={openContextMenu}
-      disabled={inTurn.phase === "taking card" || currentUser !== user}
+      disabled={inTurn.phase === "taking card" || inTurn.user !== user}
     >
       <img
         height="100"
@@ -43,12 +34,4 @@ const Card: React.FC<ICardProps & ICardStatePros> = ({
   );
 };
 
-const mapStateToProps = (state: any) => {
-  const { inTurn } = state;
-
-  return {
-    inTurn,
-  };
-};
-
-export default connect(mapStateToProps)(Card);
+export default Card;

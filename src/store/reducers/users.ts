@@ -1,6 +1,7 @@
 import { initializedGame, ICard } from "../../services/game";
 
 export interface IUserState {
+  name: string;
   inHand: Map<number, ICard>;
   onTheTable: {
     games: Map<number, ICard>[];
@@ -9,12 +10,14 @@ export interface IUserState {
 }
 
 const initialUser1: IUserState = {
+  name: "",
   inHand: initializedGame.user1Cards,
   onTheTable: { games: [] },
   tableActive: false,
 };
 
 const initialUser2: IUserState = {
+  name: "",
   inHand: initializedGame.user2Cards,
   onTheTable: { games: [] },
   tableActive: false,
@@ -28,6 +31,12 @@ export const user1 = (
   const inHand = new Map(state.inHand);
 
   switch (action.type) {
+    case "START_GAME":
+      return {
+        ...state,
+        name: action.payload.nameUser1,
+      };
+
     case "ADD_TO_HAND_1":
       inHand.set(key, value);
 
@@ -98,6 +107,12 @@ export const user2 = (
   const inHand = new Map(state.inHand);
 
   switch (action.type) {
+    case "START_GAME":
+      return {
+        ...state,
+        name: action.payload.nameUser2,
+      };
+
     case "ADD_TO_HAND_2":
       inHand.set(key, value);
 
