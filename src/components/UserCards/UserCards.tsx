@@ -5,9 +5,6 @@ import UserSelectableCards from "../UserSelectableCards/UserSelectableCards";
 import GameContext, { IUserState } from "../../context/GameContext/GameContext";
 
 interface IUserCards {
-  user: IUserState;
-  currentUser: string;
-  tableActive: boolean;
   openContextMenu?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   currentCardKey?: number;
   handleActivatePutOnTableModeClick?: (
@@ -17,24 +14,16 @@ interface IUserCards {
 }
 
 const UserCards: React.FC<IUserCards> = ({
-  user,
   currentCardKey,
-  tableActive,
   openContextMenu,
   handleActivatePutOnTableModeClick,
   handlePassTurnClick,
 }) => {
-  const { inTurn } = useContext(GameContext);
+  const { user, inTurn } = useContext(GameContext);
 
   return (
     <div>
-      <div style={{ marginBottom: "20px" }}>
-        <h2 className={inTurn.user === user.type ? "in-turn" : "not-in-turn"}>
-          {user.name} - Cartas
-        </h2>
-      </div>
-
-      {tableActive ? (
+      {user.tableActive ? (
         <UserSelectableCards inHand={user.inHand} user={user} />
       ) : (
         <UserDraggableCards

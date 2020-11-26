@@ -6,14 +6,16 @@ interface IDeckProps {
 }
 
 const Deck: React.FC<IDeckProps> = ({ handleGetFromDeckClick }) => {
-  const { inTurn } = useContext(GameContext);
+  const { user, inTurn } = useContext(GameContext);
 
   return (
     <div>
       <h3>Monte</h3>
       <button
         data-user={inTurn.user}
-        disabled={inTurn.phase === "need to discard"}
+        disabled={
+          user.type !== inTurn.user || inTurn.phase === "need to discard"
+        }
         onClick={handleGetFromDeckClick}
       >
         Pegar do monte

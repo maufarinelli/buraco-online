@@ -99,7 +99,7 @@ const UserDraggableCards: React.FC<
             }
           >
             <Card
-              user={userType}
+              userType={userType}
               cardKey={cardKey}
               card={card}
               openContextMenu={openContextMenu}

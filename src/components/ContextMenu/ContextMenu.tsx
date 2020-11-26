@@ -1,14 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
+import GameContext from "../../context/GameContext/GameContext";
+import SocketContext from "../../context/SocketContext/SocketContext";
 
 interface IContextMenuProps {
-  currentUser: string;
-  currentCardKey: number;
+  cardKey: number;
 
-  contextMenuTop: number;
-  contextMenuLeft: number;
-  isTable: boolean;
+  // contextMenuTop: number;
+  // contextMenuLeft: number;
 
-  handleDiscardClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   handleActivatePutOnTableModeClick: (
     event: React.MouseEvent<HTMLButtonElement>
   ) => void;
@@ -18,27 +17,31 @@ interface IContextMenuProps {
 }
 
 const ContextMenu: React.FC<IContextMenuProps> = ({
-  currentUser,
-  currentCardKey,
+  cardKey,
 
-  contextMenuTop,
-  contextMenuLeft,
-  isTable,
+  // contextMenuTop,
+  // contextMenuLeft,
 
-  handleDiscardClick,
   handleActivatePutOnTableModeClick,
   handleGetFromDiscardedClick,
-}) => (
-  <div
-    className="context-menu"
-    style={{ top: contextMenuTop, left: contextMenuLeft }}
-  >
-    {!isTable && (
+}) => {
+  const { inTurn } = useContext(GameContext);
+  const socket = useContext(SocketContext);
+
+  const handleDiscardClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    socket.emit("discard", inTurn.user);
+  };
+
+  return (
+    <div
+      className="context-menu"
+      // style={{ top: contextMenuTop, left: contextMenuLeft }}
+    >
       <ul>
         <li>
           <button
-            data-user={currentUser}
-            data-card-key={currentCardKey}
+            data-user={inTurn.user}
+            data-card-key={cardKey}
             onClick={handleDiscardClick}
           >
             Descartar
@@ -46,17 +49,16 @@ const ContextMenu: React.FC<IContextMenuProps> = ({
         </li>
         <li>
           <button
-            data-user={currentUser}
-            data-card-key={currentCardKey}
+            data-user={inTurn.user}
+            data-card-key={cardKey}
             onClick={handleActivatePutOnTableModeClick}
           >
             Descer jogo
           </button>
         </li>
       </ul>
-    )}
 
-    {isTable && (
+      {/* {isTable && (
       <ul>
         <li>
           <button
@@ -68,8 +70,9 @@ const ContextMenu: React.FC<IContextMenuProps> = ({
           </button>
         </li>
       </ul>
-    )}
-  </div>
-);
+    )} */}
+    </div>
+  );
+};
 
 export default ContextMenu;

@@ -4,12 +4,12 @@ import Card from "../Card/Card";
 
 interface IUserDraggableTablePros {
   data: Map<number, ICard>;
-  user: string;
+  userType: string;
 }
 
 const UserDraggableTable: React.FC<IUserDraggableTablePros> = ({
   data,
-  user,
+  userType,
 }) => {
   const [dragging, setDragging] = useState(false);
   const [list, setList] = useState(data);
@@ -56,7 +56,7 @@ const UserDraggableTable: React.FC<IUserDraggableTablePros> = ({
                 : undefined
             }
           >
-            <Card user={user} cardKey={cardKey} card={card} />
+            <Card userType={userType} cardKey={cardKey} card={card} />
           </div>
         ))}
       </div>
