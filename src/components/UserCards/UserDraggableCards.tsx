@@ -1,8 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { ICard } from "../../services/game";
 import Card from "../Card/Card";
 import { changeCardsPositionInHand } from "../../store/actions";
 import { connect } from "react-redux";
+import ActionsContext from "../../context/ActionsContext/ActionsContext";
+import SocketContext from "../../context/SocketContext/SocketContext";
+import GameContext from "../../context/GameContext/GameContext";
 
 interface IUserDraggableCardsProps {
   data: Map<number, ICard>;
@@ -28,6 +31,9 @@ const UserDraggableCards: React.FC<
   const [list, setList] = useState(data);
   const [dragging, setDragging] = useState(false);
   const [dragItemNodeIndex, setDragItemNodeIndex] = useState(-1);
+  const { isDiscardMode, setDiscardMode, discard } = useContext(ActionsContext);
+  const socket = useContext(SocketContext);
+  const { inTurn } = useContext(GameContext);
 
   useEffect(() => {
     setList(data);
@@ -81,6 +87,16 @@ const UserDraggableCards: React.FC<
     setDragItemNodeIndex(-1);
   };
 
+  const handleCardClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    const cardKey = event.currentTarget.dataset.cardKey;
+
+    if (isDiscardMode && cardKey) {
+      discard(userType, parseInt(cardKey, 10), socket);
+      setDiscardMode(false);
+    }
+  };
+
   if (list) {
     return (
       <div className="drag-n-drop">
@@ -102,7 +118,10 @@ const UserDraggableCards: React.FC<
               userType={userType}
               cardKey={cardKey}
               card={card}
-              openContextMenu={openContextMenu}
+              handleCardClick={handleCardClick}
+              disableRule={
+                inTurn.phase === "taking card" || inTurn.user !== userType
+              }
             />
           </div>
         ))}

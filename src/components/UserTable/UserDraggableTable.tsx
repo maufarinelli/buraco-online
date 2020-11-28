@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
+import GameContext from "../../context/GameContext/GameContext";
 import { ICard } from "../../services/game";
 import Card from "../Card/Card";
 
@@ -14,6 +15,7 @@ const UserDraggableTable: React.FC<IUserDraggableTablePros> = ({
   const [dragging, setDragging] = useState(false);
   const [list, setList] = useState(data);
   const dragItemNode = useRef(null);
+  const { inTurn } = useContext(GameContext);
 
   const handleDragStart = (event: React.MouseEvent<HTMLDivElement>) => {
     setDragging(true);
@@ -56,7 +58,14 @@ const UserDraggableTable: React.FC<IUserDraggableTablePros> = ({
                 : undefined
             }
           >
-            <Card userType={userType} cardKey={cardKey} card={card} />
+            <Card
+              userType={userType}
+              cardKey={cardKey}
+              card={card}
+              disableRule={
+                inTurn.phase === "taking card" || inTurn.user !== userType
+              }
+            />
           </div>
         ))}
       </div>

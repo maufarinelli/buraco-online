@@ -34,6 +34,7 @@ const UserTable: React.FC<IUserTable> = ({ userType, onTheTable }) => {
                 userType={userType}
                 cardKey={cardKey}
                 card={card}
+                disableRule={false}
               />
             ))}
           </GamesListItem>

@@ -33,7 +33,7 @@ const UserCards: React.FC<IUserCards> = ({
         />
       )}
 
-      {inTurn.phase === "pass turn" && inTurn.user === user.type && (
+      {/* {inTurn.phase === "pass turn" && inTurn.user === user.type && (
         <ul>
           <li>
             <button
@@ -48,7 +48,7 @@ const UserCards: React.FC<IUserCards> = ({
             <button onClick={handlePassTurnClick}>Passar a vez</button>
           </li>
         </ul>
-      )}
+      )} */}
     </div>
   );
 };

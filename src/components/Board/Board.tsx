@@ -19,7 +19,10 @@ import UserTable from "../UserTable/UserTable";
 import UserToolbar from "../UserToolbar/UserToolbar";
 import { BoardWrapper, GameWrapper } from "./styles";
 import { EVENTS } from "../../global/EVENTS";
-import { handleDiscardedChanged } from "../../handlers/discarded";
+import {
+  handleDiscardedChanged,
+  handleUserGotFromDiscarded,
+} from "../../handlers/discarded";
 
 const Board: React.FC = () => {
   const [user, setUser] = useState<IUserState>(initialUser);
@@ -67,6 +70,10 @@ const Board: React.FC = () => {
 
     socket.on(EVENTS.CHANGE_USER, (data: { inTurn: IInTurnState }) => {
       handleChangeUser(data, gameContext);
+    });
+
+    socket.on(EVENTS.USER_GOT_FROM_DISCARDED, (data: string) => {
+      handleUserGotFromDiscarded(data, gameContext);
     });
   }, []);
 

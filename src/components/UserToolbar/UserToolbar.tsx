@@ -29,6 +29,8 @@ const ToolbarListItem = styled.li`
 `;
 
 const ToolbarText = styled.p`
+  margin-top: 15px;
+  margin-left: 20px;
   padding: 5px 10px;
   background-color: black;
   display: inline-block;
@@ -56,7 +58,9 @@ const UserToolbar = () => {
           <ToolbarListItem>
             <button
               disabled={
-                inTurn.user !== user.type || inTurn.phase !== "need to discard"
+                inTurn.user !== user.type ||
+                inTurn.phase !== "need to discard" ||
+                isDiscardMode
               }
               onClick={handleDiscardButtonClick}
             >
@@ -64,11 +68,7 @@ const UserToolbar = () => {
             </button>
           </ToolbarListItem>
           <ToolbarListItem>
-            <button
-              disabled={
-                inTurn.user !== user.type || inTurn.phase !== "need to discard"
-              }
-            >
+            <button disabled={inTurn.user !== user.type || isDiscardMode}>
               Descer jogo
             </button>
           </ToolbarListItem>
@@ -83,9 +83,15 @@ const UserToolbar = () => {
           </ToolbarListItem>
         </ToolbarList>
       </nav>
-      <ToolbarText>
-        {isDiscardMode && "Clique na carta que voce quer descartar"}
-      </ToolbarText>
+      {inTurn.phase === "need to discard" && !isDiscardMode && (
+        <ToolbarText>
+          Você precisa descartar ou pode baixar jogos. Clique no botão
+          correspondente à ação que deseja realizar.
+        </ToolbarText>
+      )}
+      {inTurn.phase === "need to discard" && isDiscardMode && (
+        <ToolbarText>Clique na carta que você quer descartar.</ToolbarText>
+      )}
     </Toolbar>
   );
 };

@@ -8,6 +8,7 @@ export const EVENTS = {
   USER_DISCARDED: "user-discarded",
   ADD_TO_DISCARDED: "add-to-discarded",
   CHANGE_USER: "change-user",
+  USER_GOT_FROM_DISCARDED: "user-got-from-discarded",
 
   // emit()
   CONNECTION: "connection",
@@ -15,4 +16,5 @@ export const EVENTS = {
   HANDLE_START_GAME: "handle-start-game",
   GET_CARD_FROM_DECK: "get-card-from-deck",
   DISCARD: "discard",
+  GET_FROM_DISCARDED: "get-from-discarded",
 };
