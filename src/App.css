@@ -32,3 +32,7 @@ button:disabled img {
 .drag-n-drop div {
   display: inline-block;
 }
+
+button {
+  cursor: pointer;
+}

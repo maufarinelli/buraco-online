@@ -2,3 +2,7 @@
   background-color: rgb(253, 241, 170);
   cursor: pointer;
 }
+
+.is-table-card {
+  cursor: pointer;
+}

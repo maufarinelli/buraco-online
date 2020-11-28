@@ -5,6 +5,7 @@ import ActionsContext, {
 } from "../../context/ActionsContext/ActionsContext";
 import GameContext from "../../context/GameContext/GameContext";
 import SocketContext from "../../context/SocketContext/SocketContext";
+import { EVENTS } from "../../global/EVENTS";
 
 const Toolbar = styled.div`
   display: flex;
@@ -41,9 +42,14 @@ const ToolbarText = styled.p`
 const UserToolbar = () => {
   const { user, inTurn } = useContext(GameContext);
   const { isDiscardMode, setDiscardMode } = useContext(ActionsContext);
+  const socket = useContext(SocketContext);
 
   const handleDiscardButtonClick = () => {
     setDiscardMode(true);
+  };
+
+  const handlePassTurnClick = () => {
+    socket.emit(EVENTS.PASS_TURN);
   };
 
   return (
@@ -68,7 +74,11 @@ const UserToolbar = () => {
             </button>
           </ToolbarListItem>
           <ToolbarListItem>
-            <button disabled={inTurn.user !== user.type || isDiscardMode}>
+            <button
+              disabled={
+                inTurn.user !== user.type || inTurn.phase === "taking card"
+              }
+            >
               Descer jogo
             </button>
           </ToolbarListItem>
@@ -77,6 +87,7 @@ const UserToolbar = () => {
               disabled={
                 inTurn.user !== user.type || inTurn.phase !== "pass turn"
               }
+              onClick={handlePassTurnClick}
             >
               Passar a vez
             </button>
@@ -91,6 +102,12 @@ const UserToolbar = () => {
       )}
       {inTurn.phase === "need to discard" && isDiscardMode && (
         <ToolbarText>Clique na carta que você quer descartar.</ToolbarText>
+      )}
+      {inTurn.phase === "pass turn" && (
+        <ToolbarText>
+          Você pode baixar jogos ou apenas passar a vez. Clique no botão
+          correspondente à ação que deseja realizar.
+        </ToolbarText>
       )}
     </Toolbar>
   );

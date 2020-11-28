@@ -59,7 +59,6 @@ const UserDraggableTable: React.FC<IUserDraggableTablePros> = ({
             }
           >
             <Card
-              userType={userType}
               cardKey={cardKey}
               card={card}
               disableRule={

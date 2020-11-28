@@ -31,7 +31,6 @@ const UserTable: React.FC<IUserTable> = ({ userType, onTheTable }) => {
             {[...game.entries()].map(([cardKey, card]) => (
               <Card
                 key={cardKey}
-                userType={userType}
                 cardKey={cardKey}
                 card={card}
                 disableRule={false}

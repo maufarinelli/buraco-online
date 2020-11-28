@@ -6,26 +6,24 @@ import { ICard } from "../../services/game";
 import "./card.css";
 
 interface ICardProps {
-  userType: string;
   cardKey: number;
   card: ICard;
   handleCardClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   disableRule: boolean;
+  className?: string;
 }
 
 const Card: React.FC<ICardProps> = ({
-  userType,
   cardKey,
   card,
   handleCardClick,
   disableRule,
+  className,
 }) => {
-  const { isDiscardMode } = useContext(ActionsContext);
-
   return (
     <>
       <button
-        className={isDiscardMode ? "is-discard-mode" : ""}
+        className={className}
         data-card-key={cardKey}
         onClick={handleCardClick}
         disabled={disableRule}

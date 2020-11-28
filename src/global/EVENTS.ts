@@ -17,4 +17,5 @@ export const EVENTS = {
   GET_CARD_FROM_DECK: "get-card-from-deck",
   DISCARD: "discard",
   GET_FROM_DISCARDED: "get-from-discarded",
+  PASS_TURN: "pass-turn",
 };

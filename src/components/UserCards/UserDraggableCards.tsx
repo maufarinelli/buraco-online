@@ -115,13 +115,13 @@ const UserDraggableCards: React.FC<
             }
           >
             <Card
-              userType={userType}
               cardKey={cardKey}
               card={card}
               handleCardClick={handleCardClick}
               disableRule={
                 inTurn.phase === "taking card" || inTurn.user !== userType
               }
+              className={isDiscardMode ? "is-discard-mode" : ""}
             />
           </div>
         ))}

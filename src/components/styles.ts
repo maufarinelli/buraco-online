@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const TableWrapper = styled.div`
   flex: 1;
+  min-height: 170px;
 
   display: flex;
   justify-content: space-between;
