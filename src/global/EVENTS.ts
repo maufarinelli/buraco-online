@@ -18,4 +18,5 @@ export const EVENTS = {
   DISCARD: "discard",
   GET_FROM_DISCARDED: "get-from-discarded",
   PASS_TURN: "pass-turn",
+  CHANGE_CARDS_POSITION: "change-cards-position",
 };

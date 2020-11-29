@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useReducer } from "react";
-import { useDispatch } from "react-redux";
 import SocketContext from "../../context/SocketContext/SocketContext";
+import { EVENTS } from "../../global/EVENTS";
 
 interface IState {
   nameUser1: string;
@@ -36,11 +36,11 @@ const StartingPage: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    socket.on("user1-logged", (data: any) => {
+    socket.on(EVENTS.USER1_LOGGED, (data: any) => {
       dispatch({ type: "setUser1", payload: data });
     });
 
-    socket.on("user2-logged", (data: any) => {
+    socket.on(EVENTS.USER2_LOGGED, (data: any) => {
       dispatch({ type: "setUser2", payload: data });
     });
   }, []);
@@ -65,13 +65,13 @@ const StartingPage: React.FC = () => {
       name = state.nameUser2;
     }
 
-    if (socket) socket.emit("user-login", { user, name });
+    if (socket) socket.emit(EVENTS.USER_LOGIN, { user, name });
   };
 
   const handleStartGame = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    socket.emit("handle-start-game");
+    socket.emit(EVENTS.HANDLE_START_GAME);
   };
 
   return (

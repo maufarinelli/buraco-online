@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { ICard } from "../../services/game";
 import Card from "../Card/Card";
-import { changeCardsPositionInHand } from "../../store/actions";
-import { connect } from "react-redux";
 import ActionsContext from "../../context/ActionsContext/ActionsContext";
 import SocketContext from "../../context/SocketContext/SocketContext";
 import GameContext from "../../context/GameContext/GameContext";
+import { EVENTS } from "../../global/EVENTS";
 
 interface IUserDraggableCardsProps {
   data: Map<number, ICard>;
@@ -13,20 +12,9 @@ interface IUserDraggableCardsProps {
   openContextMenu?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-interface IUserDraggableCardsState {
-  dispatchChangeCardsPositionInHand: (
-    user: string,
-    cards: Map<number, ICard>
-  ) => void;
-}
-
-const UserDraggableCards: React.FC<
-  IUserDraggableCardsProps & IUserDraggableCardsState
-> = ({
+const UserDraggableCards: React.FC<IUserDraggableCardsProps> = ({
   data,
   userType,
-  openContextMenu,
-  dispatchChangeCardsPositionInHand,
 }) => {
   const [list, setList] = useState(data);
   const [dragging, setDragging] = useState(false);
@@ -37,7 +25,17 @@ const UserDraggableCards: React.FC<
 
   useEffect(() => {
     setList(data);
-  }, [setList, data]);
+  }, [data]);
+
+  useEffect(() => {
+    if (!dragging && list.size !== 0) {
+      // After handleDragEnd, send the new list ordered
+      socket.emit(EVENTS.CHANGE_CARDS_POSITION, {
+        userType,
+        cards: JSON.stringify(Array.from(list)),
+      });
+    }
+  }, [dragging]);
 
   const dragItemNode = useRef(null);
 
@@ -45,7 +43,7 @@ const UserDraggableCards: React.FC<
     event: React.MouseEvent<HTMLDivElement>,
     cardList: { cardIndex: number; list: Map<number, ICard> }
   ) => {
-    const { cardIndex, list } = cardList;
+    const { cardIndex } = cardList;
 
     dragItemNode.current = event.target as any;
     (dragItemNode.current as any)?.addEventListener("dragend", handleDragEnd);
@@ -64,7 +62,7 @@ const UserDraggableCards: React.FC<
 
     if (dragItemNode.current !== event.target) {
       setList((oldList) => {
-        const newList = new Map();
+        const newList = new Map<number, ICard>();
         const newListCards = [...oldList.entries()];
 
         // @ts-ignore
@@ -75,13 +73,11 @@ const UserDraggableCards: React.FC<
           newList.set(item[0], item[1]);
         });
 
-        const newListCardsMap = new Map(newList);
-
-        dispatchChangeCardsPositionInHand(userType, newListCardsMap);
-        return newListCardsMap;
+        return new Map(newList);
       });
     }
   };
+
   const handleDragEnd = () => {
     setDragging(false);
     setDragItemNodeIndex(-1);
@@ -132,11 +128,4 @@ const UserDraggableCards: React.FC<
   }
 };
 
-const mapDispatchToProps = (dispatch: any) => ({
-  dispatchChangeCardsPositionInHand: (
-    user: string,
-    cards: Map<number, ICard>
-  ) => dispatch(changeCardsPositionInHand(user, cards)),
-});
-
-export default connect(null, mapDispatchToProps)(UserDraggableCards);
+export default UserDraggableCards;
