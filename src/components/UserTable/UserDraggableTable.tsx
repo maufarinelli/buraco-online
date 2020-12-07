@@ -1,77 +1,54 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useContext, useState } from "react";
+import styled from "styled-components";
 import GameContext from "../../context/GameContext/GameContext";
-import { ICard } from "../../services/game";
-import Card from "../Card/Card";
+import MessageBar from "../MessageBar/MessageBar";
+import UserCards from "../UserCards/UserCards";
+import UserTableCards from "../UserCards/UserTableCards";
 
-interface IUserDraggableTablePros {
-  data: Map<number, ICard>;
-  userType: string;
-}
+const UserTable = styled.div`
+  min-width: 200px;
+  min-height: 80px;
+  border: 1px solid #fff;
+  border-radius: 15px;
+`;
 
-const UserDraggableTable: React.FC<IUserDraggableTablePros> = ({
-  data,
-  userType,
-}) => {
+const UserDraggableTable: React.FC = () => {
   const [dragging, setDragging] = useState(false);
-  const [list, setList] = useState(data);
-  const dragItemNode = useRef(null);
-  const { inTurn } = useContext(GameContext);
+  const [dragItemNodeIndex, setDragItemNodeIndex] = useState(-1);
+  const { isErrorPutCardOnTable } = useContext(GameContext);
 
-  const handleDragStart = (event: React.MouseEvent<HTMLDivElement>) => {
-    setDragging(true);
-
-    dragItemNode.current = event.target as any;
-    (dragItemNode.current as any)?.addEventListener("dragend", handleDragEnd);
-  };
-
-  const handleDragEnter = (
-    event: React.MouseEvent<HTMLDivElement>,
-    cardKey: number,
-    card: ICard
+  const handleDragStart = (
+    event: React.DragEvent<HTMLDivElement>,
+    cardIndex: number,
+    cardKey: number
   ) => {
-    setList((oldList) => {
-      const newList = new Map(oldList);
-      newList.set(cardKey, card);
-
-      return newList;
-    });
+    setDragging(true);
+    setDragItemNodeIndex(cardIndex);
+    event.dataTransfer.setData("cardKey", cardKey.toString());
   };
 
-  const handleDragEnd = () => {
+  const handleDragEnd = (event: React.DragEvent<HTMLDivElement>) => {
     setDragging(false);
   };
 
-  if (list) {
-    return (
-      <div className="drag-n-drop">
-        {[...list.entries()].map(([cardKey, card], cardIndex) => (
-          <div
-            ref={dragItemNode}
-            draggable
-            key={cardKey}
-            onDragStart={(e) => handleDragStart(e)}
-            onDragEnter={
-              dragging
-                ? (e) => {
-                    handleDragEnter(e, cardKey, card);
-                  }
-                : undefined
-            }
-          >
-            <Card
-              cardKey={cardKey}
-              card={card}
-              disableRule={
-                inTurn.phase === "taking card" || inTurn.user !== userType
-              }
-            />
-          </div>
-        ))}
-      </div>
-    );
-  } else {
-    return null;
-  }
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  return (
+    <UserTable onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
+      <UserTableCards />
+      {isErrorPutCardOnTable && (
+        <MessageBar>Esta carta não pode fazer parte desse jogo.</MessageBar>
+      )}
+      <UserCards
+        handleDragStart={handleDragStart}
+        dragging={dragging}
+        dragItemNodeIndex={dragItemNodeIndex}
+        setDragItemNodeIndex={setDragItemNodeIndex}
+      />
+    </UserTable>
+  );
 };
 
 export default UserDraggableTable;

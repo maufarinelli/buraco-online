@@ -13,9 +13,7 @@ const Deck: React.FC<IDeckProps> = ({ handleGetFromDeckClick }) => {
       <h3>Monte</h3>
       <button
         data-user={inTurn.user}
-        disabled={
-          user.type !== inTurn.user || inTurn.phase === "need to discard"
-        }
+        disabled={user.type !== inTurn.user || inTurn.phase !== "taking card"}
         onClick={handleGetFromDeckClick}
       >
         Pegar do monte

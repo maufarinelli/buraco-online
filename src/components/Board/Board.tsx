@@ -7,22 +7,25 @@ import GameContext, {
 } from "../../context/GameContext/GameContext";
 import SocketContext from "../../context/SocketContext/SocketContext";
 import { discard } from "../../context/ActionsContext/ActionsContext";
-import { handleChangeUser, handleUserCardsChanged } from "../../handlers/user";
+import {
+  handleChangeUser,
+  handleErrorPutCardOnTable,
+  handleUserCardsChanged,
+} from "../../handlers/user";
 import { ICard } from "../../services/game";
-import ContextMenu from "../ContextMenu/ContextMenu";
 import Deck from "../Deck/Deck";
 import Header from "../Header/Header";
-import { TableWrapper, UserTableWrapper } from "../styles";
+import { TableWrapper } from "../styles";
 import Table from "../Table/Table";
-import UserCards from "../UserCards/UserCards";
-import UserTable from "../UserTable/UserTable";
 import UserToolbar from "../UserToolbar/UserToolbar";
-import { BoardWrapper, GameWrapper } from "./styles";
+import { BoardWrapper, Wrapper } from "./styles";
 import { EVENTS } from "../../global/EVENTS";
 import {
   handleDiscardedChanged,
   handleUserGotFromDiscarded,
 } from "../../handlers/discarded";
+import UserDraggableTable from "../UserTable/UserDraggableTable";
+import { handleChangePhase } from "../../handlers/inTurn";
 
 const Board: React.FC = () => {
   const [user, setUser] = useState<IUserState>(initialUser);
@@ -33,6 +36,7 @@ const Board: React.FC = () => {
   const [isDiscardMode, setDiscardMode] = useState(false);
   const [isPutOnTableMode, setPutOnTableMode] = useState(false);
   const [discarded, setDiscarded] = useState(new Map<number, ICard>());
+  const [isErrorPutCardOnTable, setErrorPutCardOnTable] = useState(false);
 
   const socket = useContext(SocketContext);
   const gameContext = {
@@ -42,6 +46,8 @@ const Board: React.FC = () => {
     setInTurn,
     discarded,
     setDiscarded,
+    isErrorPutCardOnTable,
+    setErrorPutCardOnTable,
   };
   const actionsContext = {
     isDiscardMode,
@@ -75,6 +81,14 @@ const Board: React.FC = () => {
     socket.on(EVENTS.USER_GOT_FROM_DISCARDED, (data: string) => {
       handleUserGotFromDiscarded(data, gameContext);
     });
+
+    socket.on(EVENTS.CHANGE_PHASE, (data: { inTurn: IInTurnState }) => {
+      handleChangePhase(data, gameContext);
+    });
+
+    socket.on(EVENTS.ERROR_PUT_CARD_ON_TABLE, (data: string) => {
+      handleErrorPutCardOnTable(gameContext);
+    });
   }, []);
 
   const handleGetFromDeckClick = () => {
@@ -85,17 +99,19 @@ const Board: React.FC = () => {
   if (!user) return null;
   return (
     <GameContext.Provider value={gameContext}>
-      <Header />
-      <BoardWrapper>
-        <ActionsContext.Provider value={actionsContext}>
-          <TableWrapper>
-            <Deck handleGetFromDeckClick={handleGetFromDeckClick} />
-            <Table />
-          </TableWrapper>
-          <UserToolbar />
-          <UserCards />
-        </ActionsContext.Provider>
-      </BoardWrapper>
+      <Wrapper>
+        <Header />
+        <BoardWrapper>
+          <ActionsContext.Provider value={actionsContext}>
+            <TableWrapper>
+              <Deck handleGetFromDeckClick={handleGetFromDeckClick} />
+              <Table />
+            </TableWrapper>
+            <UserToolbar />
+            <UserDraggableTable />
+          </ActionsContext.Provider>
+        </BoardWrapper>
+      </Wrapper>
     </GameContext.Provider>
   );
 };

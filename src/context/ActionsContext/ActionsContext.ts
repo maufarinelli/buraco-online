@@ -1,4 +1,5 @@
 import React from "react";
+import { EVENTS } from "../../global/EVENTS";
 
 interface IActionsContext {
   isDiscardMode: boolean;
@@ -19,7 +20,7 @@ export const discard = (
   cardKey: number,
   socket: SocketIOClient.Socket
 ) => {
-  socket.emit("discard", { userType, cardKey });
+  socket.emit(EVENTS.DISCARD, { userType, cardKey });
 };
 
 export const initialActionsContext = {

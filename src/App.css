@@ -29,6 +29,11 @@ button:disabled img {
   opacity: 0.3;
 }
 
+.drag-n-drop {
+  border: 1px solid #fff;
+  margin: 10px;
+}
+
 .drag-n-drop div {
   display: inline-block;
 }

@@ -8,6 +8,7 @@ export const TableWrapper = styled.div`
   justify-content: space-between;
 
   border: 1px solid #fff;
+  border-radius: 15px;
   margin: 10px 0;
   padding: 20px;
 `;
@@ -18,6 +19,7 @@ export const CardWrapper = styled.button`
 
 export const UserTableWrapper = styled.div`
   border: 1px solid #fff;
+  border-radius: 15px;
   margin: 10px 0;
   padding: 20px;
 `;

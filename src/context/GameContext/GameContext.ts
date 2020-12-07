@@ -3,9 +3,15 @@ import { ICard } from "../../services/game";
 
 export type TUserType = "user1" | "user2";
 
+export type phases =
+  | "taking card"
+  | "need to discard"
+  | "putting game on the table - need to discard"
+  | "putting game on the table - pass turn"
+  | "pass turn";
 export interface IInTurnState {
   user: TUserType;
-  phase: "taking card" | "need to discard" | "pass turn";
+  phase: phases;
 }
 
 export interface IUserState {
@@ -13,15 +19,8 @@ export interface IUserState {
   id: string;
   type: TUserType;
   inHand: Map<number, ICard>;
-  onTheTable: {
-    games: Map<number, ICard>[];
-  };
+  onTheTable: Map<number, ICard>[];
   tableActive: boolean;
-}
-
-export interface IInTurnState {
-  user: "user1" | "user2";
-  phase: "taking card" | "need to discard" | "pass turn";
 }
 
 export interface IGameContext {
@@ -33,35 +32,17 @@ export interface IGameContext {
 
   discarded: Map<number, ICard>;
   setDiscarded: (cards: Map<number, ICard>) => void;
+
+  isErrorPutCardOnTable: boolean;
+  setErrorPutCardOnTable: (isError: boolean) => void;
 }
-
-// export const openContextMenu = (cardKey: string) => {
-//   // if (isTable) {
-//   //   setTableContext(true);
-//   // } else {
-//   //   setTableContext(false);
-//   // }
-
-//   if (user && cardKey) {
-//     //   const top = event.clientY + 20;
-//     //   const left = event.clientX + 30;
-
-//     //   setContextMenuTop(top);
-//     //   setContextMenuLeft(left);
-//     //   toggleContextMenu(true);
-
-//     setCurrentCardKeyClicked();
-//   }
-// };
 
 export const initialUser = {
   name: "",
   id: "",
   type: "user1" as TUserType,
   inHand: new Map<number, ICard>(),
-  onTheTable: {
-    games: [],
-  },
+  onTheTable: [],
   tableActive: false,
 };
 
@@ -77,6 +58,9 @@ const initialGameContext: IGameContext = {
 
   discarded: new Map<number, ICard>(),
   setDiscarded: (cards: Map<number, ICard>) => {},
+
+  isErrorPutCardOnTable: false,
+  setErrorPutCardOnTable: (isError: boolean) => {},
 };
 
 const GameContext = React.createContext<IGameContext>(initialGameContext);

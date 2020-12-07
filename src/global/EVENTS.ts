@@ -9,6 +9,8 @@ export const EVENTS = {
   ADD_TO_DISCARDED: "add-to-discarded",
   CHANGE_USER: "change-user",
   USER_GOT_FROM_DISCARDED: "user-got-from-discarded",
+  CHANGE_PHASE: "change-phase",
+  ERROR_PUT_CARD_ON_TABLE: "error-put-card-on-table",
 
   // emit()
   CONNECTION: "connection",
@@ -19,4 +21,7 @@ export const EVENTS = {
   GET_FROM_DISCARDED: "get-from-discarded",
   PASS_TURN: "pass-turn",
   CHANGE_CARDS_POSITION: "change-cards-position",
+  ACTIVATE_TABLE: "activate-table",
+  PUT_CARD_ON_TABLE: "put-card-on-table",
+  END_PUT_CARD_ON_TABLE: "end-put-card-on-table",
 };

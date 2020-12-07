@@ -6,6 +6,7 @@ import ActionsContext, {
 import GameContext from "../../context/GameContext/GameContext";
 import SocketContext from "../../context/SocketContext/SocketContext";
 import { EVENTS } from "../../global/EVENTS";
+import MessageBar from "../MessageBar/MessageBar";
 
 const Toolbar = styled.div`
   display: flex;
@@ -29,19 +30,11 @@ const ToolbarListItem = styled.li`
   margin-right: 5px;
 `;
 
-const ToolbarText = styled.p`
-  margin-top: 15px;
-  margin-left: 20px;
-  padding: 5px 10px;
-  background-color: black;
-  display: inline-block;
-  font-size: 20px;
-  line-height: 1.2;
-`;
-
 const UserToolbar = () => {
   const { user, inTurn } = useContext(GameContext);
-  const { isDiscardMode, setDiscardMode } = useContext(ActionsContext);
+  const { isDiscardMode, setDiscardMode, setPutOnTableMode } = useContext(
+    ActionsContext
+  );
   const socket = useContext(SocketContext);
 
   const handleDiscardButtonClick = () => {
@@ -49,7 +42,24 @@ const UserToolbar = () => {
   };
 
   const handlePassTurnClick = () => {
+    setPutOnTableMode(false);
     socket.emit(EVENTS.PASS_TURN);
+  };
+
+  const handleTableActiveClick = () => {
+    setPutOnTableMode(true);
+    socket.emit(EVENTS.ACTIVATE_TABLE, {
+      userType: user.type,
+      currentPhase: inTurn.phase,
+    });
+  };
+
+  const handleEndPutCardsOnTable = () => {
+    setPutOnTableMode(false);
+    socket.emit(EVENTS.END_PUT_CARD_ON_TABLE, {
+      userType: user.type,
+      currentPhase: inTurn.phase,
+    });
   };
 
   return (
@@ -61,53 +71,73 @@ const UserToolbar = () => {
       </ToobarTitle>
       <nav>
         <ToolbarList>
-          <ToolbarListItem>
-            <button
-              disabled={
-                inTurn.user !== user.type ||
-                inTurn.phase !== "need to discard" ||
-                isDiscardMode
-              }
-              onClick={handleDiscardButtonClick}
-            >
-              Descartar
-            </button>
-          </ToolbarListItem>
-          <ToolbarListItem>
-            <button
-              disabled={
-                inTurn.user !== user.type || inTurn.phase === "taking card"
-              }
-            >
-              Descer jogo
-            </button>
-          </ToolbarListItem>
-          <ToolbarListItem>
-            <button
-              disabled={
-                inTurn.user !== user.type || inTurn.phase !== "pass turn"
-              }
-              onClick={handlePassTurnClick}
-            >
-              Passar a vez
-            </button>
-          </ToolbarListItem>
+          {inTurn.phase === "putting game on the table - need to discard" ||
+          inTurn.phase === "putting game on the table - pass turn" ? (
+            <ToolbarListItem>
+              <button onClick={handleEndPutCardsOnTable}>
+                Terminei de baixar jogos
+              </button>
+            </ToolbarListItem>
+          ) : (
+            <>
+              <ToolbarListItem>
+                <button
+                  disabled={
+                    inTurn.user !== user.type ||
+                    inTurn.phase !== "need to discard" ||
+                    isDiscardMode
+                  }
+                  onClick={handleDiscardButtonClick}
+                >
+                  Descartar
+                </button>
+              </ToolbarListItem>
+              <ToolbarListItem>
+                <button
+                  disabled={
+                    inTurn.user !== user.type || inTurn.phase === "taking card"
+                  }
+                  onClick={handleTableActiveClick}
+                >
+                  Descer jogo
+                </button>
+              </ToolbarListItem>
+              <ToolbarListItem>
+                <button
+                  disabled={
+                    inTurn.user !== user.type ||
+                    inTurn.phase === "taking card" ||
+                    inTurn.phase === "need to discard"
+                  }
+                  onClick={handlePassTurnClick}
+                >
+                  Passar a vez
+                </button>
+              </ToolbarListItem>
+            </>
+          )}
         </ToolbarList>
       </nav>
       {inTurn.phase === "need to discard" && !isDiscardMode && (
-        <ToolbarText>
+        <MessageBar>
           Você precisa descartar ou pode baixar jogos. Clique no botão
           correspondente à ação que deseja realizar.
-        </ToolbarText>
+        </MessageBar>
       )}
       {inTurn.phase === "need to discard" && isDiscardMode && (
-        <ToolbarText>Clique na carta que você quer descartar.</ToolbarText>
+        <MessageBar>Clique na carta que você quer descartar.</MessageBar>
       )}
       {inTurn.phase === "pass turn" && (
-        <ToolbarText>
+        <MessageBar>
           Você pode baixar jogos ou apenas passar a vez. Clique no botão
           correspondente à ação que deseja realizar.
-        </ToolbarText>
+        </MessageBar>
+      )}
+      {(inTurn.phase === "putting game on the table - need to discard" ||
+        inTurn.phase === "putting game on the table - pass turn") && (
+        <MessageBar>
+          Baixe seu(s) jogo(s) e logo apos Clique "Terminei de baixar jogos".
+        </MessageBar>
       )}
     </Toolbar>
   );
