@@ -24,7 +24,7 @@ import {
   handleDiscardedChanged,
   handleUserGotFromDiscarded,
 } from "../../handlers/discarded";
-import UserDraggableTable from "../UserTable/UserDraggableTable";
+import UserTable from "../UserTable/UserTable";
 import { handleChangePhase } from "../../handlers/inTurn";
 
 const Board: React.FC = () => {
@@ -108,7 +108,7 @@ const Board: React.FC = () => {
               <Table />
             </TableWrapper>
             <UserToolbar />
-            <UserDraggableTable />
+            <UserTable />
           </ActionsContext.Provider>
         </BoardWrapper>
       </Wrapper>
