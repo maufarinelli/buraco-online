@@ -11,6 +11,7 @@ export const EVENTS = {
   USER_GOT_FROM_DISCARDED: "user-got-from-discarded",
   CHANGE_PHASE: "change-phase",
   ERROR_PUT_CARD_ON_TABLE: "error-put-card-on-table",
+  OTHER_USER_TABLE_CHANGED: "other-user-table-changed",
 
   // emit()
   CONNECTION: "connection",

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import styled from "styled-components";
 import ActionsContext from "../../context/ActionsContext/ActionsContext";
 import GameContext from "../../context/GameContext/GameContext";
 import SocketContext from "../../context/SocketContext/SocketContext";
@@ -16,6 +17,10 @@ interface IUserCards {
   dragItemNodeIndex: number;
   setDragItemNodeIndex: React.Dispatch<React.SetStateAction<number>>;
 }
+
+const CardWrapper = styled.div`
+  width: 42px;
+`;
 
 const UserCards: React.FC<IUserCards> = ({
   handleDragStart,
@@ -83,7 +88,7 @@ const UserCards: React.FC<IUserCards> = ({
   return (
     <div className="drag-n-drop">
       {[...list.entries()].map(([cardKey, card], cardIndex) => (
-        <div
+        <CardWrapper
           draggable
           key={cardKey}
           onDragStart={(e) => handleDragStart(e, cardIndex, cardKey)}
@@ -98,7 +103,7 @@ const UserCards: React.FC<IUserCards> = ({
             }
             className={isDiscardMode ? "is-discard-mode" : ""}
           />
-        </div>
+        </CardWrapper>
       ))}
     </div>
   );

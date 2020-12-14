@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const TableWrapper = styled.div`
   flex: 1;
-  min-height: 170px;
+  min-height: 150px;
 
   display: flex;
   justify-content: space-between;
@@ -35,4 +35,8 @@ export const UserTableActive = styled.span`
 export const UserTableActiveClickable = styled.span`
   color: blue;
   cursor: pointer;
+`;
+
+export const Title = styled.h3`
+  margin-top: 0;
 `;

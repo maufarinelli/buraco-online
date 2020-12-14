@@ -1,4 +1,8 @@
-import { IInTurnState } from "../context/GameContext/GameContext";
+import {
+  IBothUsersState,
+  IInTurnState,
+  initialOtherUser,
+} from "../context/GameContext/GameContext";
 import { ICard } from "../services/game";
 
 const parseToCardMap = (cards: string) =>
@@ -21,6 +25,12 @@ export const handleUserCardsChanged = (data: string, context: any) => {
   context.setUser(parsedUser);
   context.setInTurn(parsedData.inTurn);
   context.setErrorPutCardOnTable(false);
+
+  // const otherUser = initialOtherUser;
+  // if (parsedData.user.type === "user2") {
+  //   otherUser.type = "user1";
+  // }
+  // context.setOtherUser(otherUser);
 };
 
 export const handleChangeUser = (
@@ -33,4 +43,22 @@ export const handleChangeUser = (
 
 export const handleErrorPutCardOnTable = (context: any) => {
   context.setErrorPutCardOnTable(true);
+};
+
+export const handleOtherUserTableChanged = (data: string, context: any) => {
+  const parsedData: { otherUser: any } = JSON.parse(data);
+  const { user } = context;
+
+  if (parsedData.otherUser.type === user.type) {
+    return;
+  }
+
+  const parsedOtherUser = {
+    ...parsedData.otherUser,
+    onTheTable: parsedData.otherUser.onTheTable.map((game: string) =>
+      parseToCardMap(game)
+    ),
+  };
+
+  context.setOtherUser(parsedOtherUser);
 };

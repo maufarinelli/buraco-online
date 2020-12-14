@@ -4,13 +4,14 @@ import GameContext from "../../context/GameContext/GameContext";
 import SocketContext from "../../context/SocketContext/SocketContext";
 import { handleGetFromDiscarded } from "../../handlers/discarded";
 import Card from "../Card/Card";
+import { Title } from "../styles";
 
 const TableHeader = styled.div`
   display: flex;
 
   p {
     margin-left: 10px;
-    margin-top: 1.4em;
+    margin-top: 2px;
   }
 `;
 
@@ -30,13 +31,14 @@ const Table: React.FC = () => {
   return (
     <div>
       <TableHeader>
-        <h3>Mesa</h3>
+        <Title>Mesa</Title>
         <p>Basta clicar numa carta para pega-la da mesa.</p>
       </TableHeader>
 
       {[...discarded.entries()].map(([cardKey, card]) => {
         return (
           <Card
+            key={cardKey}
             cardKey={cardKey}
             card={card}
             handleCardClick={handleCardClick}

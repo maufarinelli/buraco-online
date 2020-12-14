@@ -23,6 +23,7 @@ const UserTableGame = styled.div<{ isDraggingOver: boolean }>`
 
 const UserTableCard = styled.div`
   display: inline-block;
+  width: 42px;
 `;
 
 const UserTableCards: React.FC = () => {

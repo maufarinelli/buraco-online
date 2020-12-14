@@ -14,18 +14,23 @@ export interface IInTurnState {
   phase: phases;
 }
 
-export interface IUserState {
+export interface IBothUsersState {
   name: string;
-  id: string;
   type: TUserType;
-  inHand: Map<number, ICard>;
   onTheTable: Map<number, ICard>[];
-  tableActive: boolean;
+}
+
+export interface IUserState extends IBothUsersState {
+  id: string;
+  inHand: Map<number, ICard>;
 }
 
 export interface IGameContext {
   user: IUserState;
   setUser: (user: IUserState) => void;
+
+  otherUser: IBothUsersState;
+  setOtherUser: (user: IBothUsersState) => void;
 
   inTurn: IInTurnState;
   setInTurn: (inTurn: IInTurnState) => void;
@@ -43,12 +48,20 @@ export const initialUser = {
   type: "user1" as TUserType,
   inHand: new Map<number, ICard>(),
   onTheTable: [],
-  tableActive: false,
+};
+
+export const initialOtherUser = {
+  name: "",
+  type: "user2" as TUserType,
+  onTheTable: [],
 };
 
 const initialGameContext: IGameContext = {
   user: initialUser,
   setUser: (user: IUserState) => {},
+
+  otherUser: initialOtherUser,
+  setOtherUser: (user: IBothUsersState) => {},
 
   inTurn: {
     user: "user1",

@@ -3,13 +3,16 @@ import ActionsContext from "../../context/ActionsContext/ActionsContext";
 import GameContext, {
   IInTurnState,
   initialUser,
+  initialOtherUser,
   IUserState,
+  IBothUsersState,
 } from "../../context/GameContext/GameContext";
 import SocketContext from "../../context/SocketContext/SocketContext";
 import { discard } from "../../context/ActionsContext/ActionsContext";
 import {
   handleChangeUser,
   handleErrorPutCardOnTable,
+  handleOtherUserTableChanged,
   handleUserCardsChanged,
 } from "../../handlers/user";
 import { ICard } from "../../services/game";
@@ -26,9 +29,11 @@ import {
 } from "../../handlers/discarded";
 import UserTable from "../UserTable/UserTable";
 import { handleChangePhase } from "../../handlers/inTurn";
+import OtherUserTableCards from "../OtherUserTableCards/OtherUserTableCards";
 
 const Board: React.FC = () => {
   const [user, setUser] = useState<IUserState>(initialUser);
+  const [otherUser, setOtherUser] = useState<IBothUsersState>(initialOtherUser);
   const [inTurn, setInTurn] = useState<IInTurnState>({
     user: "user1",
     phase: "taking card",
@@ -42,6 +47,8 @@ const Board: React.FC = () => {
   const gameContext = {
     user,
     setUser,
+    otherUser,
+    setOtherUser,
     inTurn,
     setInTurn,
     discarded,
@@ -91,6 +98,14 @@ const Board: React.FC = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (user.id) {
+      socket.on(EVENTS.OTHER_USER_TABLE_CHANGED, (data: string) => {
+        handleOtherUserTableChanged(data, gameContext);
+      });
+    }
+  }, [user.id]);
+
   const handleGetFromDeckClick = () => {
     socket.emit(EVENTS.GET_CARD_FROM_DECK, user?.type);
   };
@@ -103,6 +118,7 @@ const Board: React.FC = () => {
         <Header />
         <BoardWrapper>
           <ActionsContext.Provider value={actionsContext}>
+            <OtherUserTableCards />
             <TableWrapper>
               <Deck handleGetFromDeckClick={handleGetFromDeckClick} />
               <Table />

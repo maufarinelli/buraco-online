@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import GameContext from "../../context/GameContext/GameContext";
+import { Title } from "../styles";
 
 interface IDeckProps {
   handleGetFromDeckClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -10,7 +11,7 @@ const Deck: React.FC<IDeckProps> = ({ handleGetFromDeckClick }) => {
 
   return (
     <div>
-      <h3>Monte</h3>
+      <Title>Monte</Title>
       <button
         data-user={inTurn.user}
         disabled={user.type !== inTurn.user || inTurn.phase !== "taking card"}
