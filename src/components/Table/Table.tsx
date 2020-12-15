@@ -43,7 +43,10 @@ const Table: React.FC = () => {
             card={card}
             handleCardClick={handleCardClick}
             disableRule={
-              inTurn.user !== user.type || inTurn.phase !== "taking card"
+              inTurn.user !== user.type ||
+              inTurn.phase === "need to discard" ||
+              inTurn.phase === "putting game on the table - need to discard" ||
+              inTurn.phase === "putting game on the table - pass turn"
             }
             className="is-table-card"
           />
