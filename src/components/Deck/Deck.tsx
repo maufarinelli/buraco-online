@@ -1,17 +1,23 @@
 import React, { useContext } from "react";
 import GameContext from "../../context/GameContext/GameContext";
+import SocketContext from "../../context/SocketContext/SocketContext";
+import { EVENTS } from "../../global/EVENTS";
 import { Title } from "../styles";
+import CardsDeck from "./CardsDeck";
 
-interface IDeckProps {
-  handleGetFromDeckClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-}
+const Deck: React.FC = () => {
+  const socket = useContext(SocketContext);
+  const { user, inTurn, deckSize } = useContext(GameContext);
 
-const Deck: React.FC<IDeckProps> = ({ handleGetFromDeckClick }) => {
-  const { user, inTurn } = useContext(GameContext);
+  const handleGetFromDeckClick = () => {
+    socket.emit(EVENTS.GET_CARD_FROM_DECK, user?.type);
+  };
 
   return (
     <div>
-      <Title>Monte</Title>
+      <Title>
+        Monte <small>restam {deckSize} cartas</small>
+      </Title>
       <button
         data-user={inTurn.user}
         disabled={user.type !== inTurn.user || inTurn.phase !== "taking card"}
@@ -19,6 +25,7 @@ const Deck: React.FC<IDeckProps> = ({ handleGetFromDeckClick }) => {
       >
         Pegar do monte
       </button>
+      <CardsDeck />
     </div>
   );
 };

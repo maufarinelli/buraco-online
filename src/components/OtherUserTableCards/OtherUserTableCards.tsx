@@ -7,6 +7,7 @@ import { Title } from "../styles";
 
 const UserTable = styled.div`
   display: flex;
+  flex-wrap: wrap;
   min-height: 110px;
   margin: 10px 0;
   padding: 20px;
@@ -19,7 +20,7 @@ const UserTableGame = styled.div`
   min-width: 250px;
   min-height: 110px;
   margin: 10px 10px 5px 10px;
-  border: "1px solid #fff";
+  padding-right: 42px;
 `;
 
 const UserTableCard = styled.div`

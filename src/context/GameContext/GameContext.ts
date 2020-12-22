@@ -18,12 +18,21 @@ export interface IBothUsersState {
   name: string;
   type: TUserType;
   onTheTable: Map<number, ICard>[];
+  hasMorto: boolean;
+  hasCanaster: boolean;
 }
 
 export interface IUserState extends IBothUsersState {
   id: string;
   inHand: Map<number, ICard>;
 }
+
+export interface IGameState {
+  user1_phase: "initial" | "morto" | "won";
+  user2_phase: "initial" | "morto" | "won";
+}
+
+export type TWinner = null | "user1" | "user2";
 
 export interface IGameContext {
   user: IUserState;
@@ -38,8 +47,17 @@ export interface IGameContext {
   discarded: Map<number, ICard>;
   setDiscarded: (cards: Map<number, ICard>) => void;
 
+  deckSize: number;
+  setDeckSize: (size: number) => void;
+
   isErrorPutCardOnTable: boolean;
   setErrorPutCardOnTable: (isError: boolean) => void;
+
+  isGameOver: boolean;
+  setGameOver: (isGameOver: boolean) => void;
+
+  winner: TWinner;
+  setWinner: (winner: TWinner) => void;
 }
 
 export const initialUser = {
@@ -48,12 +66,16 @@ export const initialUser = {
   type: "user1" as TUserType,
   inHand: new Map<number, ICard>(),
   onTheTable: [],
+  hasMorto: false,
+  hasCanaster: false,
 };
 
 export const initialOtherUser = {
   name: "",
   type: "user2" as TUserType,
   onTheTable: [],
+  hasMorto: false,
+  hasCanaster: false,
 };
 
 const initialGameContext: IGameContext = {
@@ -72,8 +94,17 @@ const initialGameContext: IGameContext = {
   discarded: new Map<number, ICard>(),
   setDiscarded: (cards: Map<number, ICard>) => {},
 
+  deckSize: 60,
+  setDeckSize: (size: number) => {},
+
   isErrorPutCardOnTable: false,
   setErrorPutCardOnTable: (isError: boolean) => {},
+
+  isGameOver: false,
+  setGameOver: (isGameOver: boolean) => {},
+
+  winner: null,
+  setWinner: (winner: TWinner) => null,
 };
 
 const GameContext = React.createContext<IGameContext>(initialGameContext);

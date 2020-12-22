@@ -9,16 +9,19 @@ import Card from "../Card/Card";
 
 const UserTable = styled.div`
   display: flex;
+  flex-wrap: wrap;
   min-height: 110px;
 `;
 
 const UserTableGame = styled.div<{ isDraggingOver: boolean }>`
-  display: inline-block;
-  min-width: 250px;
+  min-width: 210px;
   min-height: 110px;
   margin: 10px 10px 5px 10px;
+  padding-right: 42px;
   border: ${(props) =>
-    props.isDraggingOver ? "3px solid #ffee00" : "1px solid #fff"};
+    props.isDraggingOver ? "1px solid #ffee00" : "1px solid #fff"};
+  background-color: ${(props) =>
+    props.isDraggingOver && "rgba(255, 255, 255, 0.2)"};
 `;
 
 const UserTableCard = styled.div`
@@ -68,7 +71,7 @@ const UserTableCards: React.FC = () => {
             onDragLeave={handleDragLeave}
             isDraggingOver={isDraggingOver}
           >
-            <p>Jogo {index} </p>
+            <p>Jogo {index + 1} </p>
             {[...game.entries()].map(([cardKey, card], cardIndex) => (
               <UserTableCard draggable key={cardKey}>
                 <Card

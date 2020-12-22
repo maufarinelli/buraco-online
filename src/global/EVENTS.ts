@@ -12,6 +12,8 @@ export const EVENTS = {
   CHANGE_PHASE: "change-phase",
   ERROR_PUT_CARD_ON_TABLE: "error-put-card-on-table",
   OTHER_USER_TABLE_CHANGED: "other-user-table-changed",
+  DECK_CHANGED: "deck-changed",
+  GAME_OVER: "game-over",
 
   // emit()
   CONNECTION: "connection",

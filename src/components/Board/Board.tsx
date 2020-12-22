@@ -6,6 +6,8 @@ import GameContext, {
   initialOtherUser,
   IUserState,
   IBothUsersState,
+  IGameState,
+  TWinner,
 } from "../../context/GameContext/GameContext";
 import SocketContext from "../../context/SocketContext/SocketContext";
 import { discard } from "../../context/ActionsContext/ActionsContext";
@@ -30,6 +32,8 @@ import {
 import UserTable from "../UserTable/UserTable";
 import { handleChangePhase } from "../../handlers/inTurn";
 import OtherUserTableCards from "../OtherUserTableCards/OtherUserTableCards";
+import { handleGameOver } from "../../handlers/game";
+import { handleDeckChanged } from "../../handlers/deck";
 
 const Board: React.FC = () => {
   const [user, setUser] = useState<IUserState>(initialUser);
@@ -42,6 +46,9 @@ const Board: React.FC = () => {
   const [isPutOnTableMode, setPutOnTableMode] = useState(false);
   const [discarded, setDiscarded] = useState(new Map<number, ICard>());
   const [isErrorPutCardOnTable, setErrorPutCardOnTable] = useState(false);
+  const [deckSize, setDeckSize] = useState(60);
+  const [isGameOver, setGameOver] = useState(false);
+  const [winner, setWinner] = useState<TWinner>(null);
 
   const socket = useContext(SocketContext);
   const gameContext = {
@@ -53,8 +60,14 @@ const Board: React.FC = () => {
     setInTurn,
     discarded,
     setDiscarded,
+    deckSize,
+    setDeckSize,
     isErrorPutCardOnTable,
     setErrorPutCardOnTable,
+    isGameOver,
+    setGameOver,
+    winner,
+    setWinner,
   };
   const actionsContext = {
     isDiscardMode,
@@ -96,6 +109,14 @@ const Board: React.FC = () => {
     socket.on(EVENTS.ERROR_PUT_CARD_ON_TABLE, (data: string) => {
       handleErrorPutCardOnTable(gameContext);
     });
+
+    socket.on(EVENTS.DECK_CHANGED, (data: string) => {
+      handleDeckChanged(data, gameContext);
+    });
+
+    socket.on(EVENTS.GAME_OVER, (data: { game: IGameState }) => {
+      handleGameOver(data, gameContext);
+    });
   }, []);
 
   useEffect(() => {
@@ -105,10 +126,6 @@ const Board: React.FC = () => {
       });
     }
   }, [user.id]);
-
-  const handleGetFromDeckClick = () => {
-    socket.emit(EVENTS.GET_CARD_FROM_DECK, user?.type);
-  };
 
   // Render
   if (!user) return null;
@@ -120,7 +137,7 @@ const Board: React.FC = () => {
           <ActionsContext.Provider value={actionsContext}>
             <OtherUserTableCards />
             <TableWrapper>
-              <Deck handleGetFromDeckClick={handleGetFromDeckClick} />
+              <Deck />
               <Table />
             </TableWrapper>
             <UserToolbar />

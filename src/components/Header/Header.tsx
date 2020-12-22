@@ -15,17 +15,21 @@ const HeaderText = styled.p`
 `;
 
 const Header: React.FC = () => {
-  const { inTurn } = useContext(GameContext);
+  const { inTurn, winner } = useContext(GameContext);
 
   return (
     <div>
       <HeaderTitle>Buraco Online</HeaderTitle>
-      <HeaderText>
-        É a vez do: <b>{inTurn.user}</b>.{" "}
-        {inTurn.phase === "taking card"
-          ? "Pegue uma carta do monte ou da mesa."
-          : "Você pode descer um jogo agora ou apenas descartar."}
-      </HeaderText>
+      {winner ? (
+        <HeaderText>{winner} bateu. Fin do jogo!</HeaderText>
+      ) : (
+        <HeaderText>
+          É a vez do: <b>{inTurn.user}</b>.{" "}
+          {inTurn.phase === "taking card"
+            ? "Pegue uma carta do monte ou da mesa."
+            : "Você pode descer um jogo agora ou apenas descartar."}
+        </HeaderText>
+      )}
     </div>
   );
 };
