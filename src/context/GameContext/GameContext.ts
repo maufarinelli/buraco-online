@@ -53,6 +53,9 @@ export interface IGameContext {
   isErrorPutCardOnTable: boolean;
   setErrorPutCardOnTable: (isError: boolean) => void;
 
+  isErrorCannotFinishGame: boolean;
+  setErrorCannotFinishGame: (isError: boolean) => void;
+
   isGameOver: boolean;
   setGameOver: (isGameOver: boolean) => void;
 
@@ -94,11 +97,14 @@ const initialGameContext: IGameContext = {
   discarded: new Map<number, ICard>(),
   setDiscarded: (cards: Map<number, ICard>) => {},
 
-  deckSize: 60,
+  deckSize: 62,
   setDeckSize: (size: number) => {},
 
   isErrorPutCardOnTable: false,
   setErrorPutCardOnTable: (isError: boolean) => {},
+
+  isErrorCannotFinishGame: false,
+  setErrorCannotFinishGame: (isError: boolean) => {},
 
   isGameOver: false,
   setGameOver: (isGameOver: boolean) => {},

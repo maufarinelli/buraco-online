@@ -13,6 +13,7 @@ import SocketContext from "../../context/SocketContext/SocketContext";
 import { discard } from "../../context/ActionsContext/ActionsContext";
 import {
   handleChangeUser,
+  handleErrorCannotFinishGame,
   handleErrorPutCardOnTable,
   handleOtherUserTableChanged,
   handleUserCardsChanged,
@@ -46,7 +47,8 @@ const Board: React.FC = () => {
   const [isPutOnTableMode, setPutOnTableMode] = useState(false);
   const [discarded, setDiscarded] = useState(new Map<number, ICard>());
   const [isErrorPutCardOnTable, setErrorPutCardOnTable] = useState(false);
-  const [deckSize, setDeckSize] = useState(60);
+  const [isErrorCannotFinishGame, setErrorCannotFinishGame] = useState(false);
+  const [deckSize, setDeckSize] = useState(62);
   const [isGameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState<TWinner>(null);
 
@@ -64,6 +66,8 @@ const Board: React.FC = () => {
     setDeckSize,
     isErrorPutCardOnTable,
     setErrorPutCardOnTable,
+    isErrorCannotFinishGame,
+    setErrorCannotFinishGame,
     isGameOver,
     setGameOver,
     winner,
@@ -108,6 +112,10 @@ const Board: React.FC = () => {
 
     socket.on(EVENTS.ERROR_PUT_CARD_ON_TABLE, (data: string) => {
       handleErrorPutCardOnTable(gameContext);
+    });
+
+    socket.on(EVENTS.ERROR_CANNOT_FINISH_GAME, (data: string) => {
+      handleErrorCannotFinishGame(gameContext);
     });
 
     socket.on(EVENTS.DECK_CHANGED, (data: string) => {

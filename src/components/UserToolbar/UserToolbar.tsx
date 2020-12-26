@@ -31,7 +31,7 @@ const ToolbarListItem = styled.li`
 `;
 
 const UserToolbar = () => {
-  const { user, inTurn } = useContext(GameContext);
+  const { user, inTurn, isErrorPutCardOnTable } = useContext(GameContext);
   const { isDiscardMode, setDiscardMode, setPutOnTableMode } = useContext(
     ActionsContext
   );
@@ -137,6 +137,11 @@ const UserToolbar = () => {
         inTurn.phase === "putting game on the table - pass turn") && (
         <MessageBar>
           Baixe seu(s) jogo(s) e logo apos Clique "Terminei de baixar jogos".
+        </MessageBar>
+      )}
+      {isErrorPutCardOnTable && (
+        <MessageBar>
+          Você ainda não tem canastra para finalizar o jogo.
         </MessageBar>
       )}
     </Toolbar>

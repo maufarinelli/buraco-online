@@ -25,12 +25,6 @@ export const handleUserCardsChanged = (data: string, context: any) => {
   context.setUser(parsedUser);
   context.setInTurn(parsedData.inTurn);
   context.setErrorPutCardOnTable(false);
-
-  // const otherUser = initialOtherUser;
-  // if (parsedData.user.type === "user2") {
-  //   otherUser.type = "user1";
-  // }
-  // context.setOtherUser(otherUser);
 };
 
 export const handleChangeUser = (
@@ -39,10 +33,15 @@ export const handleChangeUser = (
 ) => {
   const { inTurn } = data;
   context.setInTurn(inTurn);
+  context.setErrorCannotFinishGame(false);
 };
 
 export const handleErrorPutCardOnTable = (context: any) => {
   context.setErrorPutCardOnTable(true);
+};
+
+export const handleErrorCannotFinishGame = (context: any) => {
+  context.setErrorCannotFinishGame(true);
 };
 
 export const handleOtherUserTableChanged = (data: string, context: any) => {

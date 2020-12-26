@@ -11,6 +11,7 @@ export const EVENTS = {
   USER_GOT_FROM_DISCARDED: "user-got-from-discarded",
   CHANGE_PHASE: "change-phase",
   ERROR_PUT_CARD_ON_TABLE: "error-put-card-on-table",
+  ERROR_CANNOT_FINISH_GAME: "error-cannot-finish-game",
   OTHER_USER_TABLE_CHANGED: "other-user-table-changed",
   DECK_CHANGED: "deck-changed",
   GAME_OVER: "game-over",
