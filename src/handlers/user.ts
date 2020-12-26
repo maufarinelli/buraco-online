@@ -25,6 +25,8 @@ export const handleUserCardsChanged = (data: string, context: any) => {
   context.setUser(parsedUser);
   context.setInTurn(parsedData.inTurn);
   context.setErrorPutCardOnTable(false);
+  context.setErrorCannotFinishGame(false);
+  context.setGotMortoMessage(false);
 };
 
 export const handleChangeUser = (
@@ -33,7 +35,6 @@ export const handleChangeUser = (
 ) => {
   const { inTurn } = data;
   context.setInTurn(inTurn);
-  context.setErrorCannotFinishGame(false);
 };
 
 export const handleErrorPutCardOnTable = (context: any) => {
@@ -60,4 +61,8 @@ export const handleOtherUserTableChanged = (data: string, context: any) => {
   };
 
   context.setOtherUser(parsedOtherUser);
+};
+
+export const handleGotMorto = (context: any) => {
+  context.setGotMortoMessage(true);
 };

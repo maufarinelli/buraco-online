@@ -31,7 +31,13 @@ const ToolbarListItem = styled.li`
 `;
 
 const UserToolbar = () => {
-  const { user, inTurn, isErrorPutCardOnTable } = useContext(GameContext);
+  const {
+    user,
+    inTurn,
+    isErrorCannotFinishGame,
+    gotMorto,
+    winner,
+  } = useContext(GameContext);
   const { isDiscardMode, setDiscardMode, setPutOnTableMode } = useContext(
     ActionsContext
   );
@@ -118,31 +124,40 @@ const UserToolbar = () => {
           )}
         </ToolbarList>
       </nav>
-      {inTurn.phase === "need to discard" && !isDiscardMode && (
-        <MessageBar>
-          Você precisa descartar ou pode baixar jogos. Clique no botão
-          correspondente à ação que deseja realizar.
-        </MessageBar>
-      )}
-      {inTurn.phase === "need to discard" && isDiscardMode && (
-        <MessageBar>Clique na carta que você quer descartar.</MessageBar>
-      )}
-      {inTurn.phase === "pass turn" && (
-        <MessageBar>
-          Você pode baixar jogos ou apenas passar a vez. Clique no botão
-          correspondente à ação que deseja realizar.
-        </MessageBar>
-      )}
-      {(inTurn.phase === "putting game on the table - need to discard" ||
-        inTurn.phase === "putting game on the table - pass turn") && (
-        <MessageBar>
-          Baixe seu(s) jogo(s) e logo apos Clique "Terminei de baixar jogos".
-        </MessageBar>
-      )}
-      {isErrorPutCardOnTable && (
-        <MessageBar>
-          Você ainda não tem canastra para finalizar o jogo.
-        </MessageBar>
+      {winner ? (
+        <MessageBar>{winner} BATEU. FIM DO JOGO! </MessageBar>
+      ) : (
+        <>
+          {inTurn.phase === "need to discard" && !isDiscardMode && (
+            <MessageBar>
+              Você precisa descartar ou pode baixar jogos. Clique no botão
+              correspondente à ação que deseja realizar.
+            </MessageBar>
+          )}
+          {inTurn.phase === "need to discard" && isDiscardMode && (
+            <MessageBar>Clique na carta que você quer descartar.</MessageBar>
+          )}
+          {inTurn.phase === "pass turn" && (
+            <MessageBar>
+              Você pode baixar jogos ou apenas passar a vez. Clique no botão
+              correspondente à ação que deseja realizar.
+            </MessageBar>
+          )}
+          {(inTurn.phase === "putting game on the table - need to discard" ||
+            inTurn.phase === "putting game on the table - pass turn") && (
+            <MessageBar>
+              Baixe seu(s) jogo(s) e logo apos Clique "Terminei de baixar
+              jogos".
+            </MessageBar>
+          )}
+          {gotMorto && <MessageBar>Você pegou o Morto!!!</MessageBar>}
+          {isErrorCannotFinishGame && (
+            <MessageBar>
+              Você ainda não tem canastra para finalizar o jogo. A vez agora é
+              do adversário
+            </MessageBar>
+          )}
+        </>
       )}
     </Toolbar>
   );

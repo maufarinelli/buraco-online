@@ -21,7 +21,7 @@ const Header: React.FC = () => {
     <div>
       <HeaderTitle>Buraco Online</HeaderTitle>
       {winner ? (
-        <HeaderText>{winner} bateu. Fin do jogo!</HeaderText>
+        <HeaderText>{winner} BATEU. FIM DO JOGO! </HeaderText>
       ) : (
         <HeaderText>
           É a vez do: <b>{inTurn.user}</b>.{" "}

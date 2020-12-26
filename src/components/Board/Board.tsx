@@ -15,6 +15,7 @@ import {
   handleChangeUser,
   handleErrorCannotFinishGame,
   handleErrorPutCardOnTable,
+  handleGotMorto,
   handleOtherUserTableChanged,
   handleUserCardsChanged,
 } from "../../handlers/user";
@@ -48,6 +49,7 @@ const Board: React.FC = () => {
   const [discarded, setDiscarded] = useState(new Map<number, ICard>());
   const [isErrorPutCardOnTable, setErrorPutCardOnTable] = useState(false);
   const [isErrorCannotFinishGame, setErrorCannotFinishGame] = useState(false);
+  const [gotMorto, setGotMortoMessage] = useState(false);
   const [deckSize, setDeckSize] = useState(62);
   const [isGameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState<TWinner>(null);
@@ -68,6 +70,8 @@ const Board: React.FC = () => {
     setErrorPutCardOnTable,
     isErrorCannotFinishGame,
     setErrorCannotFinishGame,
+    gotMorto,
+    setGotMortoMessage,
     isGameOver,
     setGameOver,
     winner,
@@ -122,7 +126,11 @@ const Board: React.FC = () => {
       handleDeckChanged(data, gameContext);
     });
 
-    socket.on(EVENTS.GAME_OVER, (data: { game: IGameState }) => {
+    socket.on(EVENTS.GOT_MORTO, (data: string) => {
+      handleGotMorto(gameContext);
+    });
+
+    socket.on(EVENTS.GAME_OVER, (data: IGameState) => {
       handleGameOver(data, gameContext);
     });
   }, []);

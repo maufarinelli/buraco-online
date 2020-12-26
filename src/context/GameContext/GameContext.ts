@@ -56,6 +56,9 @@ export interface IGameContext {
   isErrorCannotFinishGame: boolean;
   setErrorCannotFinishGame: (isError: boolean) => void;
 
+  gotMorto: boolean;
+  setGotMortoMessage: (gotMorto: boolean) => void;
+
   isGameOver: boolean;
   setGameOver: (isGameOver: boolean) => void;
 
@@ -105,6 +108,9 @@ const initialGameContext: IGameContext = {
 
   isErrorCannotFinishGame: false,
   setErrorCannotFinishGame: (isError: boolean) => {},
+
+  gotMorto: false,
+  setGotMortoMessage: (gotMorto: boolean) => {},
 
   isGameOver: false,
   setGameOver: (isGameOver: boolean) => {},

@@ -14,6 +14,7 @@ export const EVENTS = {
   ERROR_CANNOT_FINISH_GAME: "error-cannot-finish-game",
   OTHER_USER_TABLE_CHANGED: "other-user-table-changed",
   DECK_CHANGED: "deck-changed",
+  GOT_MORTO: "got-morto",
   GAME_OVER: "game-over",
 
   // emit()
