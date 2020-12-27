@@ -1,36 +1,49 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import GameContext from "../../context/GameContext/GameContext";
+import SocketContext from "../../context/SocketContext/SocketContext";
+import { EVENTS } from "../../global/EVENTS";
+import MessageBar from "../MessageBar/MessageBar";
+
+const HeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const HeaderTitle = styled.h1`
   display: inline-block;
   margin: 10px;
 `;
-const HeaderText = styled.p`
-  padding: 5px 10px;
-  background-color: black;
-  display: inline-block;
-  font-size: 20px;
-  line-height: 1.2;
+
+const LougOutButton = styled.button`
+  height: 30px;
 `;
 
 const Header: React.FC = () => {
   const { inTurn, winner } = useContext(GameContext);
+  const socket = useContext(SocketContext);
+
+  const handleLogout = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    socket.emit(EVENTS.USER_LOGOUT);
+  };
 
   return (
-    <div>
+    <HeaderWrapper>
       <HeaderTitle>Buraco Online</HeaderTitle>
       {winner ? (
-        <HeaderText>{winner} BATEU. FIM DO JOGO! </HeaderText>
+        <MessageBar>{winner} BATEU. FIM DO JOGO! </MessageBar>
       ) : (
-        <HeaderText>
+        <MessageBar>
           É a vez do: <b>{inTurn.user}</b>.{" "}
           {inTurn.phase === "taking card"
             ? "Pegue uma carta do monte ou da mesa."
             : "Você pode descer um jogo agora ou apenas descartar."}
-        </HeaderText>
+        </MessageBar>
       )}
-    </div>
+      <LougOutButton onClick={handleLogout}>Sair do jogo</LougOutButton>
+    </HeaderWrapper>
   );
 };
 

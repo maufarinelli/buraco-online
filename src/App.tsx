@@ -4,6 +4,7 @@ import Board from "./components/Board/Board";
 import "./services/game";
 import StartingPage from "./components/StartingPage/StartingPage";
 import SocketContext from "./context/SocketContext/SocketContext";
+import { EVENTS } from "./global/EVENTS";
 
 // @ts-ignore
 Array.prototype.swapItems = function (a: any, b: any) {
@@ -16,7 +17,11 @@ const App: React.FC = () => {
   const [isUsersReady, setUsersToStart] = useState(false);
 
   useEffect(() => {
-    socket.on("users-ready-to-start", () => {
+    socket.on(EVENTS.RESET_GAME, () => {
+      setUsersToStart(false);
+    });
+
+    socket.on(EVENTS.USERS_READY_TO_START, () => {
       setUsersToStart(true);
     });
 

@@ -1,7 +1,4 @@
-import React, { useContext } from "react";
-import ActionsContext from "../../context/ActionsContext/ActionsContext";
-import GameContext from "../../context/GameContext/GameContext";
-import SocketContext from "../../context/SocketContext/SocketContext";
+import React from "react";
 import { ICard } from "../../services/game";
 import "./card.css";
 

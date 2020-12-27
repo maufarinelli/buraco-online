@@ -9,6 +9,7 @@ const MessageBar = styled.p`
   display: inline-block;
   font-size: 20px;
   line-height: 1.2;
+  border-radius: 10px;
 `;
 
 export default MessageBar;

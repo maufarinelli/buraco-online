@@ -4,6 +4,7 @@ export const EVENTS = {
   USER1_LOGGED: "user1-logged",
   USER2_LOGGED: "user2-logged",
   USERS_READY_TO_START: "users-ready-to-start",
+  RESET_GAME: "reset-game",
   INIT_GAME: "init-game",
   USER_DISCARDED: "user-discarded",
   ADD_TO_DISCARDED: "add-to-discarded",
@@ -20,6 +21,7 @@ export const EVENTS = {
   // emit()
   CONNECTION: "connection",
   USER_LOGIN: "user-login",
+  USER_LOGOUT: "user-logout",
   HANDLE_START_GAME: "handle-start-game",
   GET_CARD_FROM_DECK: "get-card-from-deck",
   DISCARD: "discard",
