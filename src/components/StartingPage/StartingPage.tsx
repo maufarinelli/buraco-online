@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useReducer } from "react";
+import styled from "styled-components";
 import SocketContext from "../../context/SocketContext/SocketContext";
 import { EVENTS } from "../../global/EVENTS";
 
@@ -30,6 +31,10 @@ const reducer = (state: IState, action: any) => {
       return state;
   }
 };
+
+const Wrapper = styled.div`
+  margin: 20px;
+`;
 
 const StartingPage: React.FC = () => {
   const socket = useContext(SocketContext);
@@ -75,7 +80,7 @@ const StartingPage: React.FC = () => {
   };
 
   return (
-    <div>
+    <Wrapper>
       <h1>Comece um novo jogo.</h1>
 
       {!state.user1 ? (
@@ -115,7 +120,7 @@ const StartingPage: React.FC = () => {
       {state.user1 && state.user2 && (
         <button onClick={handleStartGame}>Começar</button>
       )}
-    </div>
+    </Wrapper>
   );
 };
 

@@ -33,10 +33,15 @@ const Header: React.FC = () => {
     <HeaderWrapper>
       <HeaderTitle>Buraco Online</HeaderTitle>
       {winner ? (
-        <MessageBar>{winner} BATEU. FIM DO JOGO! </MessageBar>
+        <MessageBar>
+          {winner === "user1" ? inTurn.user1Name : inTurn.user2Name} BATEU. FIM
+          DO JOGO!{" "}
+        </MessageBar>
       ) : (
         <MessageBar>
-          É a vez do: <b>{inTurn.user}</b>.{" "}
+          É a vez de:{" "}
+          <b>{inTurn.user === "user1" ? inTurn.user1Name : inTurn.user2Name}</b>
+          .{" "}
           {inTurn.phase === "taking card"
             ? "Pegue uma carta do monte ou da mesa."
             : "Você pode descer um jogo agora ou apenas descartar."}

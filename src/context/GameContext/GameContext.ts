@@ -11,6 +11,8 @@ export type phases =
   | "pass turn";
 export interface IInTurnState {
   user: TUserType;
+  user1Name: string;
+  user2Name: string;
   phase: phases;
 }
 
@@ -93,6 +95,8 @@ const initialGameContext: IGameContext = {
 
   inTurn: {
     user: "user1",
+    user1Name: "",
+    user2Name: "",
     phase: "taking card",
   },
   setInTurn: (inTurn: IInTurnState) => {},

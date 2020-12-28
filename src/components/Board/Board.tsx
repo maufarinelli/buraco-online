@@ -42,6 +42,8 @@ const Board: React.FC = () => {
   const [otherUser, setOtherUser] = useState<IBothUsersState>(initialOtherUser);
   const [inTurn, setInTurn] = useState<IInTurnState>({
     user: "user1",
+    user1Name: "",
+    user2Name: "",
     phase: "taking card",
   });
   const [isDiscardMode, setDiscardMode] = useState(false);
