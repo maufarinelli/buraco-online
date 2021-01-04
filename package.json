@@ -14,6 +14,7 @@
     "@types/react-redux": "^7.1.9",
     "@types/redux-logger": "^3.0.8",
     "@types/styled-components": "^5.1.0",
+    "express": "^4.17.1",
     "pixi.js": "^5.2.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -27,7 +28,8 @@
     "typescript": "~3.7.2"
   },
   "scripts": {
-    "start": "react-scripts start --no-cache",
+    "start": "node server.js",
+    "start-dev": "react-scripts start --no-cache",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
