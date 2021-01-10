@@ -36,6 +36,15 @@ const Wrapper = styled.div`
   margin: 20px;
 `;
 
+const Label = styled.label`
+  margin-right: 10px;
+`;
+
+const Input = styled.input`
+  height: 22px;
+  margin-bottom: 10px;
+`;
+
 const StartingPage: React.FC = () => {
   const socket = useContext(SocketContext);
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -85,15 +94,15 @@ const StartingPage: React.FC = () => {
 
       {!state.user1 ? (
         <form onSubmit={handleUserLogin} data-user="user1">
-          <label htmlFor="">
+          <Label htmlFor="">
             Nome :
-            <input
+            <Input
               type="text"
               data-user="user1"
               onChange={handleInputChange}
               value={state.nameUser1}
             />
-          </label>
+          </Label>
           <button type="submit">Jogador 1</button>
         </form>
       ) : (
@@ -102,15 +111,15 @@ const StartingPage: React.FC = () => {
 
       {!state.user2 ? (
         <form onSubmit={handleUserLogin} data-user="user2">
-          <label htmlFor="">
+          <Label htmlFor="">
             Nome :
-            <input
+            <Input
               type="text"
               data-user="user2"
               onChange={handleInputChange}
               value={state.nameUser2}
             />
-          </label>
+          </Label>
           <button type="submit">Jogador 2</button>
         </form>
       ) : (

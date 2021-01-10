@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { ICard } from "../../services/game";
 import "./card.css";
 
@@ -10,6 +11,10 @@ interface ICardProps {
   className?: string;
 }
 
+const CardButton = styled.button`
+  padding: 2px;
+`;
+
 const Card: React.FC<ICardProps> = ({
   cardKey,
   card,
@@ -19,7 +24,7 @@ const Card: React.FC<ICardProps> = ({
 }) => {
   return (
     <>
-      <button
+      <CardButton
         className={className}
         data-card-key={cardKey}
         onClick={handleCardClick}
@@ -30,7 +35,7 @@ const Card: React.FC<ICardProps> = ({
           src={`./cards/${card.cardCode}.jpg`}
           alt={card.cardLabel}
         />
-      </button>
+      </CardButton>
     </>
   );
 };
