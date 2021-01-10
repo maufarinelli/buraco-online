@@ -25,7 +25,7 @@ export interface IBothUsersState {
 }
 
 export interface IUserState extends IBothUsersState {
-  id: string;
+  screenId: string;
   inHand: Map<number, ICard>;
 }
 
@@ -70,7 +70,7 @@ export interface IGameContext {
 
 export const initialUser = {
   name: "",
-  id: "",
+  screenId: "",
   type: "user1" as TUserType,
   inHand: new Map<number, ICard>(),
   onTheTable: [],

@@ -137,7 +137,7 @@ const UserToolbar = () => {
           {inTurn.phase === "need to discard" && isDiscardMode && (
             <MessageBar>Clique na carta que você quer descartar.</MessageBar>
           )}
-          {inTurn.phase === "pass turn" && (
+          {inTurn.user === user.type && inTurn.phase === "pass turn" && (
             <MessageBar>
               Você pode baixar jogos ou apenas passar a vez. Clique no botão
               correspondente à ação que deseja realizar.
