@@ -22,6 +22,10 @@ const UserTableGame = styled.div<{ isDraggingOver: boolean }>`
     props.isDraggingOver ? "1px solid #ffee00" : "1px solid #fff"};
   background-color: ${(props) =>
     props.isDraggingOver && "rgba(255, 255, 255, 0.2)"};
+
+  p {
+    margin-left: 10px;
+  }
 `;
 
 const UserTableCard = styled.div`
