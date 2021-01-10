@@ -111,9 +111,7 @@ const UserToolbar = () => {
               <ToolbarListItem>
                 <button
                   disabled={
-                    inTurn.user !== user.type ||
-                    inTurn.phase === "taking card" ||
-                    inTurn.phase === "need to discard"
+                    inTurn.user !== user.type || inTurn.phase !== "pass turn"
                   }
                   onClick={handlePassTurnClick}
                 >

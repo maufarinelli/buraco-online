@@ -20,3 +20,8 @@ button {
   line-height: 1;
   color: rgb(20, 20, 20);
 }
+
+button:disabled {
+  background-color: #c5c5c5;
+  color: rgba(125, 124, 124, 0.7);
+}
