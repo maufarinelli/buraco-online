@@ -25,11 +25,12 @@
     "redux-logger": "^3.0.6",
     "socket.io-client": "^2.3.1",
     "styled-components": "^5.1.1",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.2",
+    "uuid": "^8.3.2"
   },
   "scripts": {
     "start": "node server.js",
-    "start-dev": "react-scripts start --no-cache",
+    "start-dev": "NODE_ENV=development && react-scripts start --no-cache",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -50,6 +51,7 @@
     ]
   },
   "devDependencies": {
-    "@types/socket.io-client": "^1.4.34"
+    "@types/socket.io-client": "^1.4.34",
+    "@types/uuid": "^8.3.0"
   }
 }

@@ -138,12 +138,12 @@ const Board: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (user.id) {
+    if (user.screenId) {
       socket.on(EVENTS.OTHER_USER_TABLE_CHANGED, (data: string) => {
         handleOtherUserTableChanged(data, gameContext);
       });
     }
-  }, [user.id]);
+  }, [user.screenId]);
 
   // Render
   if (!user) return null;

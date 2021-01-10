@@ -111,9 +111,7 @@ const UserToolbar = () => {
               <ToolbarListItem>
                 <button
                   disabled={
-                    inTurn.user !== user.type ||
-                    inTurn.phase === "taking card" ||
-                    inTurn.phase === "need to discard"
+                    inTurn.user !== user.type || inTurn.phase !== "pass turn"
                   }
                   onClick={handlePassTurnClick}
                 >
@@ -137,7 +135,7 @@ const UserToolbar = () => {
           {inTurn.phase === "need to discard" && isDiscardMode && (
             <MessageBar>Clique na carta que você quer descartar.</MessageBar>
           )}
-          {inTurn.phase === "pass turn" && (
+          {inTurn.user === user.type && inTurn.phase === "pass turn" && (
             <MessageBar>
               Você pode baixar jogos ou apenas passar a vez. Clique no botão
               correspondente à ação que deseja realizar.

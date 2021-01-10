@@ -32,6 +32,7 @@ button:disabled img {
 .drag-n-drop {
   border: 1px solid #fff;
   margin: 10px;
+  border-radius: 7px;
 }
 
 .drag-n-drop div {
